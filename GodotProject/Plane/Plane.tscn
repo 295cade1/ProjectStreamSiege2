@@ -1,0 +1,23 @@
+[gd_scene load_steps=5 format=3 uid="uid://dsvw8t7is3u0t"]
+
+[ext_resource type="Script" path="res://Plane/Plane.cs" id="1_lmc2r"]
+[ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/LiftSurface.cs" id="2_qa0fu"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_cq3by"]
+
+[sub_resource type="BoxShape3D" id="BoxShape3D_hniao"]
+
+[node name="Plane" type="RigidBody3D"]
+can_sleep = false
+linear_velocity = Vector3(2.08165e-12, 2.08165e-12, -1)
+script = ExtResource("1_lmc2r")
+
+[node name="LiftEffector" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 1)
+script = ExtResource("2_qa0fu")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("BoxMesh_cq3by")
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
+shape = SubResource("BoxShape3D_hniao")
