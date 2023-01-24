@@ -3,15 +3,25 @@
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_74cdw"]
-size = Vector2(100, 100)
+size = Vector2(1000, 1000)
 
 [node name="World" type="Node3D"]
 
 [node name="Plane" parent="." instance=ExtResource("1_qnrsq")]
+transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 0, 30.3921, 0)
+linear_velocity = Vector3(0, 0, -300)
 
 [node name="Camera3D" type="Camera3D" parent="Plane"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12.3443)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 20)
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -21.6725, 0)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100, 0)
 mesh = SubResource("PlaneMesh_74cdw")
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(0.926443, -0.17727, 0.332082, -0.376434, -0.43628, 0.817286, 0, -0.882176, -0.470919, 0, 43.1016, 0)
+shadow_enabled = true
+
+[node name="CSGBox3D" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.5427, 0, -235.232)
+size = Vector3(1, 100, 1)

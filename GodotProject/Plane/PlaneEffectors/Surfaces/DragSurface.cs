@@ -1,19 +1,29 @@
 using Godot;
 using System;
 
-public partial class DragSurface : Node3D, PlaneEffector
-{
-   public float x_drag = 0.1f;
-   public float y_drag = 10.0f;
-   public float z_drag = 0.05f;
-   public void applyPlaneEffectorForce(PhysicsDirectBodyState3D state){
-      state.ApplyImpulse(
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot(-this.GlobalTransform.basis.z)) * z_drag *  this.GlobalTransform.basis.z +
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot( this.GlobalTransform.basis.z)) * z_drag * -this.GlobalTransform.basis.z +
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot(-this.GlobalTransform.basis.x)) * x_drag *  this.GlobalTransform.basis.x +
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot( this.GlobalTransform.basis.x)) * x_drag * -this.GlobalTransform.basis.x +
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot(-this.GlobalTransform.basis.y)) * y_drag *  this.GlobalTransform.basis.y +
-         Mathf.Max(0.0f,state.LinearVelocity.Normalized().Dot( this.GlobalTransform.basis.y)) * y_drag * -this.GlobalTransform.basis.y
-      , this.Transform.origin);
+public partial class DragSurface : Surface
+{  
+   [Export]
+   public float x_area = 0.5f;
+   [Export]
+   public float y_area = 100f;
+   [Export]
+   public float z_area = 0.5f;
+   [Export]
+   public float drag_coefficient = 0.5f;
+   protected static float AIRDENSITY = 1.204f; // Density of air
+   public override Vector3 applySurfaceForce(Vector3 velocity){
+
+      //To calculate the drag force of an object moving through a fluid use the formula: Fd = 1/2 * ρ * u² * A * Cd 
+      //Where ρ is the liquid density, u is the relative velocity, A is the reference area and Cd is the drag coefficient.
+      float dragArea = Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.x)) * x_area +
+                       Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.y)) * y_area +
+                       Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.z)) * z_area;
+      float dragAmount = 0.5f * AIRDENSITY * velocity.LengthSquared() * dragArea * drag_coefficient * 0.001f;
+      Vector3 dragImpulse = dragAmount * -velocity.Normalized();
+
+      //GD.Print("Dragging" + "DragImpulse" + dragImpulse + "DragAmount" + dragAmount + "dragArea" + dragArea);
+      
+      return dragImpulse + base.applySurfaceForce(velocity);
    }
 }

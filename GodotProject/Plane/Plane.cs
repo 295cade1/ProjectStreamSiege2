@@ -8,13 +8,13 @@ public partial class Plane : RigidBody3D
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
       planeEffectors = getAllEffectors();
-      GD.Print(planeEffectors.Length);
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
       foreach (PlaneEffector effector in planeEffectors) {
-         effector.applyPlaneEffectorForce(state);
+         effector.applyPlaneEffectorForce(state, this);
       }
+      GD.Print(state.LinearVelocity);
 	}
 
    private PlaneEffector[] getAllEffectors() {
