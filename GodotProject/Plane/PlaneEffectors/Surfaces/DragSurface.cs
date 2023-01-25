@@ -19,10 +19,10 @@ public partial class DragSurface : Surface
       float dragArea = Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.x)) * x_area +
                        Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.y)) * y_area +
                        Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.z)) * z_area;
-      float dragAmount = 0.5f * AIRDENSITY * velocity.LengthSquared() * dragArea * drag_coefficient * 0.001f;
+      float dragAmount = 0.5f * AIRDENSITY * velocity.LengthSquared() * dragArea * drag_coefficient;
       Vector3 dragImpulse = dragAmount * -velocity.Normalized();
 
-      //GD.Print("Dragging" + "DragImpulse" + dragImpulse + "DragAmount" + dragAmount + "dragArea" + dragArea);
+      GD.Print("Dragging" + "DragImpulse" + dragImpulse + "DragAmount" + dragAmount + "dragArea" + dragArea);
       
       return dragImpulse + base.applySurfaceForce(velocity);
    }

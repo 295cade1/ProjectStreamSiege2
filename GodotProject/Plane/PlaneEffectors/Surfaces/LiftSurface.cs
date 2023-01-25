@@ -10,7 +10,7 @@ public partial class LiftSurface : DragSurface
    public override Vector3 applySurfaceForce(Vector3 velocity){
       float angleOfAttack = velocity.Normalized().AngleTo(-this.GlobalTransform.basis.z);
       float liftAmount = 0.5f * velocity.LengthSquared() * AIRDENSITY * y_area * liftCurve.Sample(angleOfAttack/20.0f) 
-      * liftCoefficient * 0.001f;
+      * liftCoefficient;
 
       Vector3 lift = this.GlobalTransform.basis.y * liftAmount;
 
@@ -18,5 +18,4 @@ public partial class LiftSurface : DragSurface
       
       return lift + base.applySurfaceForce(velocity);
    }
-
 }

@@ -1,15 +1,28 @@
-[gd_scene load_steps=3 format=3 uid="uid://bvmpbvvl3ea1p"]
+[gd_scene load_steps=7 format=3 uid="uid://bvmpbvvl3ea1p"]
 
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_74cdw"]
-size = Vector2(1000, 1000)
+size = Vector2(100000, 1000)
+
+[sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6m25r"]
+
+[sub_resource type="Sky" id="Sky_qsbnv"]
+sky_material = SubResource("PhysicalSkyMaterial_6m25r")
+
+[sub_resource type="Environment" id="Environment_w1oax"]
+background_mode = 2
+sky = SubResource("Sky_qsbnv")
+ambient_light_source = 3
+reflected_light_source = 2
+tonemap_mode = 3
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_48oly"]
 
 [node name="World" type="Node3D"]
 
 [node name="Plane" parent="." instance=ExtResource("1_qnrsq")]
-transform = Transform3D(-0.173648, 0, 0.984808, 0, 1, 0, -0.984808, 0, -0.173648, 0, 30.3921, 0)
-linear_velocity = Vector3(0, 0, -300)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.3921, 0)
 
 [node name="Camera3D" type="Camera3D" parent="Plane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 20)
@@ -25,3 +38,23 @@ shadow_enabled = true
 [node name="CSGBox3D" type="CSGBox3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.5427, 0, -235.232)
 size = Vector3(1, 100, 1)
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_w1oax")
+camera_attributes = SubResource("CameraAttributesPractical_48oly")
+
+[node name="CSGBox3D2" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1636.1, 200, 246.993)
+size = Vector3(10, 600, 500)
+
+[node name="CSGBox3D3" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3007.25, 200, -264.175)
+size = Vector3(10, 600, 500)
+
+[node name="CSGBox3D4" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4678.7, 200, 285.272)
+size = Vector3(10, 600, 500)
+
+[node name="CSGBox3D5" type="CSGBox3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6195.56, 200, -298.445)
+size = Vector3(10, 600, 500)

@@ -5,16 +5,27 @@ using System.Collections.Generic;
 public partial class Plane : RigidBody3D
 {
    PlaneEffector[] planeEffectors;
+   float Z_speed = 0.0f;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
+
       planeEffectors = getAllEffectors();
 	}
 
+	public override void _PhysicsProcess(double delta)
+	{
+		base._PhysicsProcess(delta);
+	}
+
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
+      //state.LinearVelocity += (new Vector3(0,0,Z_speed) * 0.997f);
       foreach (PlaneEffector effector in planeEffectors) {
          effector.applyPlaneEffectorForce(state, this);
       }
+      Z_speed = state.LinearVelocity.z;
       GD.Print(state.LinearVelocity);
+      //state.LinearVelocity = new Vector3(state.LinearVelocity.x, state.LinearVelocity.y, 0);
+
 	}
 
    private PlaneEffector[] getAllEffectors() {
