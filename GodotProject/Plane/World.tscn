@@ -1,9 +1,38 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvmpbvvl3ea1p"]
+[gd_scene load_steps=13 format=3 uid="uid://bvmpbvvl3ea1p"]
 
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
+[ext_resource type="Shader" path="res://World/Terrain/GroundShader.gdshader" id="2_gr1pi"]
+[ext_resource type="Script" path="res://World/Terrain/Ground.cs" id="3_wmq0g"]
+
+[sub_resource type="Gradient" id="Gradient_byalg"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0, 0.258475, 1)
+colors = PackedColorArray(0, 0, 0, 1, 0.059322, 0.059322, 0.059322, 1, 1, 1, 1, 1)
+
+[sub_resource type="FastNoiseLite" id="FastNoiseLite_ars5b"]
+noise_type = 0
+frequency = 0.001
+fractal_type = 2
+domain_warp_enabled = true
+
+[sub_resource type="NoiseTexture2D" id="NoiseTexture2D_si1be"]
+generate_mipmaps = false
+seamless = true
+color_ramp = SubResource("Gradient_byalg")
+noise = SubResource("FastNoiseLite_ars5b")
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l6hid"]
+render_priority = 0
+shader = ExtResource("2_gr1pi")
+shader_parameter/maxHeight = 1000.0
+shader_parameter/heightmap = SubResource("NoiseTexture2D_si1be")
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_74cdw"]
-size = Vector2(100000, 1000)
+material = SubResource("ShaderMaterial_l6hid")
+custom_aabb = AABB(-1024, 2.08165e-12, -1024, 2048, 1000, 2048)
+size = Vector2(2048, 2048)
+subdivide_width = 256
+subdivide_depth = 256
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6m25r"]
 
@@ -14,7 +43,6 @@ sky_material = SubResource("PhysicalSkyMaterial_6m25r")
 background_mode = 2
 sky = SubResource("Sky_qsbnv")
 ambient_light_source = 3
-reflected_light_source = 2
 tonemap_mode = 3
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_48oly"]
@@ -27,34 +55,15 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.3921, 0)
 [node name="Camera3D" type="Camera3D" parent="Plane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 20)
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+[node name="Ground" type="MeshInstance3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -100, 0)
 mesh = SubResource("PlaneMesh_74cdw")
+script = ExtResource("3_wmq0g")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.926443, -0.17727, 0.332082, -0.376434, -0.43628, 0.817286, 0, -0.882176, -0.470919, 0, 43.1016, 0)
 shadow_enabled = true
 
-[node name="CSGBox3D" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -79.5427, 0, -235.232)
-size = Vector3(1, 100, 1)
-
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w1oax")
 camera_attributes = SubResource("CameraAttributesPractical_48oly")
-
-[node name="CSGBox3D2" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -1636.1, 200, 246.993)
-size = Vector3(10, 600, 500)
-
-[node name="CSGBox3D3" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3007.25, 200, -264.175)
-size = Vector3(10, 600, 500)
-
-[node name="CSGBox3D4" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4678.7, 200, 285.272)
-size = Vector3(10, 600, 500)
-
-[node name="CSGBox3D5" type="CSGBox3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -6195.56, 200, -298.445)
-size = Vector3(10, 600, 500)
