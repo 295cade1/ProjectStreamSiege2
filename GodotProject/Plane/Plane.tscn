@@ -50,7 +50,7 @@ mesh = SubResource("PlaneMesh_cbfy7")
 surface_material_override/0 = ExtResource("4_ro1k5")
 
 [node name="DragEffector" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 0.1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 0.25)
 script = ExtResource("3_ih2y8")
 x_area = 1.0
 y_area = 10.0
