@@ -3,6 +3,7 @@ using System;
 
 public partial class ControlSurface : DragSurface
 {
+	[Export]
 	public float controlCoefficient = 2.0f;
 	private float controlAmount = 0.0f;
 
@@ -12,15 +13,15 @@ public partial class ControlSurface : DragSurface
 	public string negativeAction = "";
 
 	[Export]
-   public Curve controlCurve;
+	public Curve controlCurve;
 
-   [Export]
-   public Curve liftCurve;
+	[Export]
+	public Curve liftCurve;
 	public override Vector3 getSurfaceForce(Vector3 velocity){
 		float angleOfAttack = velocity.Normalized().AngleTo(-this.GlobalTransform.basis.z);
 		float controlAmount = calculateActivation() * 0.5f * velocity.LengthSquared() * AIRDENSITY * y_area * controlCoefficient * liftCurve.Sample(angleOfAttack/20.0f);
 
-      Vector3 control = this.GlobalTransform.basis.y * controlAmount;
+		Vector3 control = this.GlobalTransform.basis.y * controlAmount;
 
 		//GD.Print("Controlling: " + control + "ControlActivation" + calculateActivation());
 		
