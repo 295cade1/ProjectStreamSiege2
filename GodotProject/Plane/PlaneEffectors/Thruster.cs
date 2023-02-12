@@ -3,7 +3,7 @@ using System;
 
 public partial class Thruster : Node3D, PlaneEffector
 {
-	public float thrusterForce = 130000.0f;
+	public float thrusterForce = 260000000.0f;
 
 	[Export]
 	public string positiveAction = "";
@@ -11,7 +11,7 @@ public partial class Thruster : Node3D, PlaneEffector
 		Vector3 force = -this.GlobalTransform.basis.z * thrusterForce * calculateActivation();
 		//GD.Print("Thrusting" + force);
 		state.ApplyForce(
-			force * state.Step * 558.0f,
+			force * state.Step,
 			this.GlobalPosition - obj.GlobalPosition);
 	}
 

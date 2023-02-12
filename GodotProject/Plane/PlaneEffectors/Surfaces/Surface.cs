@@ -9,7 +9,7 @@ public abstract partial class Surface : Node3D, PlaneEffector
 		if (previousPosition == new Vector3(0,0,0)) {updatePrevousPosition(state);}
 
 		state.ApplyForce(
-			(getSurfaceForce(getVelocity(state))) * state.Step * 0.558f,
+			(getSurfaceForce(getVelocity(state))) * state.Step,
 			this.GlobalPosition - state.Transform.origin);
 		updatePrevousPosition(state);
 	}

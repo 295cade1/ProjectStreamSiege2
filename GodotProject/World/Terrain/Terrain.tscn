@@ -1,0 +1,36 @@
+[gd_scene load_steps=8 format=3 uid="uid://b20wgbm8gsb56"]
+
+[ext_resource type="Shader" path="res://World/Terrain/GroundShader.gdshader" id="1_wx65k"]
+[ext_resource type="Script" path="res://World/Terrain/Ground.cs" id="2_wr7jl"]
+[ext_resource type="Script" path="res://World/Terrain/WormRiverGen.cs" id="3_v4x74"]
+
+[sub_resource type="Gradient" id="Gradient_i7e5v"]
+interpolation_mode = 2
+offsets = PackedFloat32Array(0.300847, 1)
+colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
+
+[sub_resource type="GradientTexture2D" id="GradientTexture2D_y8qh7"]
+gradient = SubResource("Gradient_i7e5v")
+fill_to = Vector2(1, 0.003663)
+
+[sub_resource type="ShaderMaterial" id="ShaderMaterial_l6hid"]
+render_priority = 0
+shader = ExtResource("1_wx65k")
+shader_parameter/points = PackedVector2Array()
+shader_parameter/maxHeight = 500.0
+shader_parameter/riverGradient = SubResource("GradientTexture2D_y8qh7")
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_74cdw"]
+material = SubResource("ShaderMaterial_l6hid")
+custom_aabb = AABB(-1024, 2.08165e-12, -1024, 2048, 1000, 2048)
+size = Vector2(2048, 2048)
+subdivide_width = 256
+subdivide_depth = 256
+
+[node name="Terrain" type="MeshInstance3D"]
+transform = Transform3D(1, -6.62645e-05, -0.000416764, 6.59978e-05, 1, -0.000662408, 0.000416806, 0.000662382, 1, 0, -100, 0)
+mesh = SubResource("PlaneMesh_74cdw")
+script = ExtResource("2_wr7jl")
+
+[node name="Node" type="Node" parent="."]
+script = ExtResource("3_v4x74")

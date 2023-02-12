@@ -12,14 +12,26 @@ public partial class Ground : MeshInstance3D
 
 	ShaderMaterial mat;
 	TerrainGenerator gen;
-	ImageTexture heightmapTexture;
+	Vector3[] points;
 	public override void _Ready()
 	{
 		distance = 0;
 		planeRef = GetNode<Plane>(plane);
 		mat = (ShaderMaterial)this.Mesh.SurfaceGetMaterial(0);
 		gen = getTerrainGenerator();
-		heightmapTexture = ImageTexture.CreateFromImage(gen.getHeightmapImage(planeRef.GlobalTransform.origin + new Vector3(0, 0, distance)));
+		initPoints();
+		
+	}
+
+	private void initPoints(){
+		points = new Vector3[250];
+		for (int i = 0; i < points.Length; i++){
+			points[i] = new Vector3(-10000, 1, -10000);
+		}
+		points[0] = new Vector3(0,1000,0);
+		for(int i = 1; i < 250; i++){
+			points[i] = new Vector3(0,300, (-150 * i) - 250);
+		}
 	}
 
 	private TerrainGenerator getTerrainGenerator() {
@@ -29,19 +41,17 @@ public partial class Ground : MeshInstance3D
 	public override void _Process(double delta)
 	{
 		updatePosition(delta);
-		updateHeightmapTexture();
 		updateGroundShader();
 	}
 
 	private void updatePosition(double delta){
-		distance += -planeRef.getSpeed() * (float)delta;
-	}
-
-	private void updateHeightmapTexture() {
-		heightmapTexture.Update(gen.getHeightmapImage(planeRef.GlobalTransform.origin + new Vector3(0, 0, distance)));
+		distance += -planeRef.getSpeed().z * (float)delta;
+		for (int i = 0; i < points.Length; i++) {
+			points[i] = points[i] + new Vector3(planeRef.getSpeed().x, 0, planeRef.getSpeed().z) * -(float)delta;
+		}
 	}
 
 	private void updateGroundShader() {
-		mat.SetShaderParameter("heightmap", heightmapTexture);
+		mat.SetShaderParameter("points", points);
 	}
 }

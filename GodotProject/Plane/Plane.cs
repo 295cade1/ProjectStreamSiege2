@@ -5,13 +5,14 @@ using System.Collections.Generic;
 public partial class Plane : RigidBody3D
 {
 	private PlaneEffector[] planeEffectors;
-	private float zSpeed;
+	private Vector3 speed;
 	[Export]
 	private bool isLocked = true;
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
-		zSpeed = 0;
+		speed = new Vector3(0,0,0);
 		planeEffectors = getAllEffectors();
+		speed = LinearVelocity;
 	}
 
 	public override void _PhysicsProcess(double delta)
@@ -20,12 +21,13 @@ public partial class Plane : RigidBody3D
 	}
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
-		if(isLocked) {state.LinearVelocity += new Vector3(0 ,0 ,zSpeed * 0.997f); }
+		if(isLocked) {state.LinearVelocity = new Vector3(speed.x * 0.999f ,state.LinearVelocity.y ,speed.z * 0.999f); }
 		foreach (PlaneEffector effector in planeEffectors) {
 			effector.applyPlaneEffectorForce(state, this);
 		}
-		zSpeed = state.LinearVelocity.z;
-		if (isLocked) {state.LinearVelocity = new Vector3(state.LinearVelocity.x, state.LinearVelocity.y, 0); }
+		speed = state.LinearVelocity;
+		GD.Print(state.LinearVelocity);
+		if (isLocked) {state.LinearVelocity = new Vector3(0, state.LinearVelocity.y, 0); }
 
 	}
 
@@ -49,7 +51,7 @@ public partial class Plane : RigidBody3D
 		return returnArray;
 	}
 
-	public float getSpeed() {
-		return zSpeed;
+	public Vector3 getSpeed() {
+		return speed;
 	}
 }
