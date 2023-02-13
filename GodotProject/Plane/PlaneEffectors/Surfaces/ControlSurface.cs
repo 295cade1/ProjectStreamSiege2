@@ -13,18 +13,24 @@ public partial class ControlSurface : DragSurface
 	public string negativeAction = "";
 
 	[Export]
+	public float smoothing = 0.9f;
+
+	[Export]
 	public Curve controlCurve;
+
+	[Export]
+	public float ANGLEOFATTACKMAX = 30.0f;
 
 	[Export]
 	public Curve liftCurve;
 	public override Vector3 getSurfaceForce(Vector3 velocity){
-		float angleOfAttack = velocity.Normalized().AngleTo(-this.GlobalTransform.basis.z) * 180 / Mathf.Pi;
-		controlAmount = Mathf.Clamp(calculateActivation() * 0.1f + controlAmount * 0.90f,-1,1);
-		float controlForce = controlAmount * 0.5f * velocity.LengthSquared() * AIRDENSITY * y_area * controlCoefficient * liftCurve.Sample(Mathf.Clamp(angleOfAttack/30.0f, 0.0f, 1.0f));
+		float angleOfAttack = velocity.Normalized().AngleTo(-this.GlobalTransform.Basis.Z) * 180 / Mathf.Pi;
+		controlAmount = Mathf.Clamp(calculateActivation() * (1 - smoothing) + controlAmount * smoothing,-1.0f,1.0f);
+		float controlForce = controlAmount * 0.5f * velocity.LengthSquared() * AIRDENSITY * y_area * controlCoefficient * liftCurve.Sample(Mathf.Clamp(angleOfAttack/ANGLEOFATTACKMAX, 0.0f, 1.0f));
 
-		Vector3 control = this.GlobalTransform.basis.y * controlForce;
+		Vector3 control = this.GlobalTransform.Basis.Y * controlForce;
 
-		//GD.Print("Controlling: " + control + "ControlActivation" + calculateActivation());
+		GD.Print("Controlling: " + control + "ControlActivation" + controlAmount);
 		
 		return control + base.getSurfaceForce(velocity);
 	}

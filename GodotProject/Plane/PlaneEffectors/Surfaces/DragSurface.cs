@@ -16,10 +16,10 @@ public partial class DragSurface : Surface
 
 		//To calculate the drag force of an object moving through a fluid use the formula: Fd = 1/2 * ρ * u² * A * Cd 
 		//Where ρ is the liquid density, u is the relative velocity, A is the reference area and Cd is the drag coefficient.
-		float dragArea = Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.x)) * x_area +
-							  Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.y)) * y_area +
-							  Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.basis.z)) * z_area;
-		float dragAmount = 0.5f * AIRDENSITY * velocity.LengthSquared() * dragArea * drag_coefficient;
+		float dragArea = Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.Basis.X)) * x_area +
+							  Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.Basis.Y)) * y_area +
+							  Mathf.Abs(velocity.Normalized().Dot(this.GlobalTransform.Basis.Z)) * z_area;
+		float dragAmount = 0.5f * AIRDENSITY * velocity.Length() * velocity.Length() * dragArea * drag_coefficient;
 		Vector3 dragImpulse = dragAmount * -velocity.Normalized();
 
 		//GD.Print("Dragging" + "DragImpulse" + dragImpulse + "DragAmount" + dragAmount + "dragArea" + dragArea);

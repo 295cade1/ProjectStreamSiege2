@@ -8,17 +8,17 @@ public partial class Ground : MeshInstance3D
 	NodePath plane;
 	Plane planeRef;
 
-	float distance;
+	Vector3 position;
 
 	ShaderMaterial mat;
 	TerrainGenerator gen;
 	Vector3[] points;
 	public override void _Ready()
 	{
-		distance = 0;
+		position = new Vector3(0,0,0);
 		planeRef = GetNode<Plane>(plane);
-		mat = (ShaderMaterial)this.Mesh.SurfaceGetMaterial(0);
-		gen = getTerrainGenerator();
+		mat = (ShaderMaterial)this.GetSurfaceOverrideMaterial(0);
+		//gen = getTerrainGenerator();
 		initPoints();
 		
 	}
@@ -28,9 +28,9 @@ public partial class Ground : MeshInstance3D
 		for (int i = 0; i < points.Length; i++){
 			points[i] = new Vector3(-10000, 1, -10000);
 		}
-		points[0] = new Vector3(0,1000,0);
+		points[0] = new Vector3(0,3000,0);
 		for(int i = 1; i < 250; i++){
-			points[i] = new Vector3(0,300, (-150 * i) - 250);
+			points[i] = new Vector3(Mathf.Sin(i / 20f) * 1000 ,600, (-100 * i) - 250);
 		}
 	}
 
@@ -45,13 +45,14 @@ public partial class Ground : MeshInstance3D
 	}
 
 	private void updatePosition(double delta){
-		distance += -planeRef.getSpeed().z * (float)delta;
+		position -= planeRef.getSpeed() * (float)delta;
 		for (int i = 0; i < points.Length; i++) {
-			points[i] = points[i] + new Vector3(planeRef.getSpeed().x, 0, planeRef.getSpeed().z) * -(float)delta;
+			points[i] = points[i] + new Vector3(planeRef.getSpeed().X, 0, planeRef.getSpeed().Z) * -(float)delta;
 		}
 	}
 
 	private void updateGroundShader() {
 		mat.SetShaderParameter("points", points);
+		mat.SetShaderParameter("position", position);
 	}
 }
