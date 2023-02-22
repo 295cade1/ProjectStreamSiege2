@@ -29,14 +29,14 @@ angular_damp = 0.5
 script = ExtResource("1_lmc2r")
 
 [node name="LiftEffectorLeft" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.08165e-12, 1)
 script = ExtResource("2_qa0fu")
 liftCoefficient = 0.7
-ANGLEOFATTACKMAX = 60.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("3_e8pjb")
 x_area = 4.0
-y_area = 12.0
-drag_coefficient = 1.0
+y_area = 24.0
+drag_coefficient = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorLeft"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 0, 0, 0)
@@ -44,14 +44,14 @@ mesh = SubResource("PlaneMesh_cbfy7")
 surface_material_override/0 = ExtResource("4_ro1k5")
 
 [node name="LiftEffectorRight" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 0, 1)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.08165e-12, 1)
 script = ExtResource("2_qa0fu")
 liftCoefficient = 0.7
-ANGLEOFATTACKMAX = 60.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("3_e8pjb")
 x_area = 4.0
-y_area = 12.0
-drag_coefficient = 1.0
+y_area = 24.0
+drag_coefficient = 2.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorRight"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, 0, 0, 0)
@@ -79,14 +79,14 @@ shape = SubResource("BoxShape3D_j4lcp")
 [node name="ControlEffectorPitchTail" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 6)
 script = ExtResource("4_wgdki")
-controlCoefficient = 6.0
+controlCoefficient = 7.0
 positiveAction = "PitchUp"
 negativeAction = "PitchDown"
-smoothing = 0.97
+smoothing = 0.95
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 80.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("8_o43em")
-y_area = 6.0
+y_area = 4.0
 drag_coefficient = 1.0
 
 [node name="ControlEffectorYawTail" type="Node3D" parent="."]
@@ -95,9 +95,8 @@ script = ExtResource("4_wgdki")
 controlCoefficient = 1.0
 positiveAction = "YawRight"
 negativeAction = "YawLeft"
-smoothing = 0.95
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 60.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("8_o43em")
 y_area = 3.0
 drag_coefficient = 2.0
@@ -107,9 +106,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.5, 0, 2.70775)
 script = ExtResource("4_wgdki")
 positiveAction = "RollRight"
 negativeAction = "RollLeft"
-smoothing = 0.0
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 60.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("8_o43em")
 y_area = 1.0
 drag_coefficient = 0.25
@@ -119,9 +117,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.5, 0, 2.70775)
 script = ExtResource("4_wgdki")
 positiveAction = "RollLeft"
 negativeAction = "RollRight"
-smoothing = 0.0
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 60.0
+ANGLEOFATTACKMAX = 90.0
 liftCurve = ExtResource("8_o43em")
 y_area = 2.0
 drag_coefficient = 0.25

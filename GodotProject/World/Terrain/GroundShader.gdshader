@@ -1,6 +1,8 @@
 shader_type spatial;
 
-uniform vec3 points[250];
+const int HASHSIZE = 32;
+const float renderDist = 4096.0f;
+uniform vec3 points[1024];
 uniform sampler2D riverGradient;
 
 uniform float maxHeight;
@@ -8,6 +10,7 @@ uniform float maxHeight;
 varying float HEIGHT;
 
 uniform vec3 position;
+
 
 void fragment() {
 	ALBEDO = vec3(HEIGHT);
@@ -85,18 +88,26 @@ float snoise(vec2 v)
   return ((130.0 * dot(m, g)) + 1.0f) / 2.0f;
 }
 
+int cursedHash(vec2 point){
+	int hashDivide = int(renderDist * 2.0f) / HASHSIZE;
+	int x = int(floor((point.x + renderDist) / float(hashDivide)));
+	int y = int(floor((point.y + renderDist) / float(hashDivide)));
+	return x + y * HASHSIZE;
+}
+
 void vertex() {
 	HEIGHT = 1.0f;
-	for (int i = 0; i < points.length(); i++) {
-		float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, VERTEX.xz) / points[i].y, 0.01f, 1.0f), 0.5f)).r;
-		if (newHeight < HEIGHT) {HEIGHT = newHeight;}
+	for (int i = cursedHash(VERTEX.xz) - HASHSIZE * 2; (i < points.length()) && (i < cursedHash(VERTEX.xz) + HASHSIZE * 2); i++) {
+			    float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, VERTEX.xz) / (points[i].y * 1.5f), 0.01f, 1.0f), 0.5f)).r;
+	        if (newHeight < HEIGHT) {HEIGHT = newHeight;}
 	}
 	vec3 pos = -position + VERTEX;
-	HEIGHT -= snoise(pos.xz / 8196.0f * 12.0f) * 0.4 + snoise(pos.xz / 8196.0f * 64.0f) * 0.1;
+	HEIGHT -= snoise(pos.xz / 8196.0f * 3.0f) * 0.3 + snoise(pos.xz / 8196.0f * 12.0f) * 0.1;
 	HEIGHT = clamp(HEIGHT, 0.0f, 1.0f);
 
-	//HEIGHT = texture(heightmap, (VERTEX.xz / 512.0f) + vec2(0.5f, 0.5f)).x * maxHeight;
 	VERTEX.y = VERTEX.y + HEIGHT * maxHeight;
 }
+
+
 
 

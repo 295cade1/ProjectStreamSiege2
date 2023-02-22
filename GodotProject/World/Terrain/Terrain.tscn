@@ -5,12 +5,11 @@
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_tb7rf"]
 custom_aabb = AABB(-2048, 0, -2048, 4096, 4000, 4096)
-size = Vector2(8196, 8196)
-subdivide_width = 512
-subdivide_depth = 512
+size = Vector2(8192, 8192)
+subdivide_width = 128
+subdivide_depth = 128
 
 [sub_resource type="Gradient" id="Gradient_ckmya"]
-interpolation_mode = 2
 offsets = PackedFloat32Array(0.292683, 1)
 colors = PackedColorArray(1, 1, 1, 1, 0, 0, 0, 1)
 
@@ -20,7 +19,7 @@ gradient = SubResource("Gradient_ckmya")
 [sub_resource type="ShaderMaterial" id="ShaderMaterial_r550c"]
 render_priority = 0
 shader = ExtResource("1_wx65k")
-shader_parameter/points = null
+shader_parameter/points = PackedVector3Array()
 shader_parameter/maxHeight = 2000.0
 shader_parameter/position = Vector3(1, 0, 0)
 shader_parameter/riverGradient = SubResource("GradientTexture1D_beep7")

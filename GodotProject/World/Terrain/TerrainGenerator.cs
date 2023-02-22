@@ -1,19 +1,17 @@
 using Godot;
 using System;
 
-public abstract partial class TerrainGenerator : Node
+public abstract partial class TerrainGenerator
 {
-	[Export]
-	private int width = 512;
-	[Export]
-	private int height = 512;
-
-	public abstract Image getHeightmapImage(Vector3 position);
-
-	public int getHeight() {
-		return height;
+	protected int index;
+	public TerrainGenerator(int index){
+		this.index = index;
 	}
-	public int getWidth() {
-		return width;
+	public int getIndex(){
+		return index;
 	}
+	public void setIndex(int index){
+		this.index = index;
+	}
+	public abstract Vector3 getNextPoint(Vector3 position);
 }

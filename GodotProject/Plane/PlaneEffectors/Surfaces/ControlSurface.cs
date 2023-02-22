@@ -30,7 +30,7 @@ public partial class ControlSurface : DragSurface
 
 		Vector3 control = this.GlobalTransform.Basis.Y * controlForce;
 
-		GD.Print("Controlling: " + control + "ControlActivation" + controlAmount);
+		//GD.Print("Controlling: " + control + "ControlActivation" + controlAmount);
 		
 		return control + base.getSurfaceForce(velocity);
 	}

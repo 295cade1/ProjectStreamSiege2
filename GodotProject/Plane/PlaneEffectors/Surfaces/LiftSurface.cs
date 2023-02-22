@@ -18,7 +18,7 @@ public partial class LiftSurface : DragSurface
 
 		Vector3 lift = this.GlobalTransform.Basis.Y * liftAmount;
 
-		GD.Print("Lifting: " + lift);
+		//GD.Print("Lifting: " + lift);
 		
 		return lift + base.getSurfaceForce(velocity);
 	}

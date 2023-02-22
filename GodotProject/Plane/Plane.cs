@@ -26,7 +26,7 @@ public partial class Plane : RigidBody3D
 			effector.applyPlaneEffectorForce(state);
 		}
 		speed = state.LinearVelocity;
-		GD.Print(state.LinearVelocity);
+		//GD.Print(state.LinearVelocity);
 		if (isLocked) {state.LinearVelocity = new Vector3(0, state.LinearVelocity.Y, 0); }
 
 	}
