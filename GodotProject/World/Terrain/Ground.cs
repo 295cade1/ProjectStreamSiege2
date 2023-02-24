@@ -108,10 +108,6 @@ public partial class Ground : MeshInstance3D
 	}
 
 	private void updateGroundShader() {
-		Vector3[] p = hashPoints();
-		foreach (Vector3 pi in p){
-			GD.Print(pi);
-		}
 		mat.SetShaderParameter("points", hashPoints());
 		mat.SetShaderParameter("position", pointsPosition);
 	}
