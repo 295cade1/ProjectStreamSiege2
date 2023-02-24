@@ -23,7 +23,7 @@ public partial class Ground : MeshInstance3D
 	[Export]
 	int HASHSIZE = 32;
 
-	int vertDiff = (int)4096/32;
+	int vertDiff = (int)8192/128;
 
 
 	public override void _Ready()

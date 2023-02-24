@@ -11,10 +11,15 @@ varying float HEIGHT;
 
 uniform vec3 position;
 
+varying vec3 Nrml;
+
 
 void fragment() {
 	ALBEDO = vec3(HEIGHT);
+	METALLIC = 0.0;
+	ROUGHNESS = 0.8;
 }
+
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -95,18 +100,32 @@ int cursedHash(vec2 point){
 	return x + y * HASHSIZE;
 }
 
-void vertex() {
-	HEIGHT = 1.0f;
-	for (int i = cursedHash(VERTEX.xz) - HASHSIZE * 2; (i < points.length()) && (i < cursedHash(VERTEX.xz) + HASHSIZE * 2); i++) {
-			    float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, VERTEX.xz) / (points[i].y * 1.5f), 0.01f, 1.0f), 0.5f)).r;
-	        if (newHeight < HEIGHT) {HEIGHT = newHeight;}
+float getHeight(vec3 point){
+	float height = 1.0f;
+	for (int i = cursedHash(point.xz) - HASHSIZE * 2; (i < points.length()) && (i < cursedHash(point.xz) + HASHSIZE * 2); i++) {
+			    float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, point.xz) / (points[i].y * 1.5f), 0.01f, 1.0f), 0.5f)).r;
+	        if (newHeight < height) {height = newHeight;}
 	}
-	vec3 pos = -position + VERTEX;
-	HEIGHT -= snoise(pos.xz / 8196.0f * 3.0f) * 0.3 + snoise(pos.xz / 8196.0f * 12.0f) * 0.1;
-	HEIGHT = clamp(HEIGHT, 0.0f, 1.0f);
+	vec3 pos = -position + point;
+	height -= snoise(pos.xz / 8196.0f * 3.0f) * 0.3 + snoise(pos.xz / 8196.0f * 12.0f) * 0.1;
+	height = clamp(height, 0.0f, 1.0f);
+	return height;
+}
+
+void vertex() {
+	
+	HEIGHT = getHeight(VERTEX);
+	
+	NORMAL = normalize( vec3(
+		(HEIGHT - getHeight(VERTEX + vec3(0.05f,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(0.05f,0,0))) * 10.0f,
+		0.005f,
+		HEIGHT - getHeight(VERTEX + vec3(0,0,0.05f)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,0.05f))) * 10.0f
+		) );
 
 	VERTEX.y = VERTEX.y + HEIGHT * maxHeight;
 }
+
+
 
 
 

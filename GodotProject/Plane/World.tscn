@@ -1,7 +1,10 @@
-[gd_scene load_steps=7 format=3 uid="uid://bvmpbvvl3ea1p"]
+[gd_scene load_steps=8 format=3 uid="uid://bvmpbvvl3ea1p"]
 
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
 [ext_resource type="PackedScene" uid="uid://b20wgbm8gsb56" path="res://World/Terrain/Terrain.tscn" id="2_6c1ba"]
+
+[sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_l6y4e"]
+auto_exposure_enabled = true
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6m25r"]
 turbidity = 1.0
@@ -13,8 +16,10 @@ sky_material = SubResource("PhysicalSkyMaterial_6m25r")
 background_mode = 2
 sky = SubResource("Sky_qsbnv")
 ambient_light_source = 3
+reflected_light_source = 2
 tonemap_mode = 3
-volumetric_fog_density = 0.001
+fog_density = 0.0001
+volumetric_fog_density = 0.01
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_48oly"]
 dof_blur_far_enabled = true
@@ -29,15 +34,23 @@ linear_velocity = Vector3(2.08165e-12, 2.08165e-12, -300)
 
 [node name="Camera3D" type="Camera3D" parent="Plane"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 20)
+attributes = SubResource("CameraAttributesPractical_l6y4e")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(0.926444, -0.17727, 0.332081, -0.0950402, 0.743447, 0.662008, -0.364238, -0.644874, 0.671914, 0, 43.1016, 0)
+transform = Transform3D(0.447861, -0.513627, 0.731853, -0.891977, -0.313082, 0.326124, 0.0616239, -0.798854, -0.59836, 0, 43.1016, 0)
 shadow_enabled = true
+shadow_bias = 0.2
+shadow_normal_bias = 4.0
 shadow_reverse_cull_face = true
+directional_shadow_mode = 0
+directional_shadow_blend_splits = true
+directional_shadow_max_distance = 4096.0
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="."]
 environment = SubResource("Environment_w1oax")
 camera_attributes = SubResource("CameraAttributesPractical_48oly")
 
 [node name="Terrain" parent="." instance=ExtResource("2_6c1ba")]
+custom_aabb = AABB(-2048, 0, -2048, 4096, 4000, 4096)
+gi_mode = 2
 plane = NodePath("../Plane")
