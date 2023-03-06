@@ -3,7 +3,7 @@ using System;
 
 public partial class Thruster : Node3D, PlaneEffector
 {
-	public float thrusterForce = 120101.0f * 56.9f;
+	public float thrusterForce = 120101.0f * 30f;
 
 	[Export]
 	public string positiveAction = "";

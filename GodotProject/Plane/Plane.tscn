@@ -1,4 +1,4 @@
-[gd_scene load_steps=14 format=3 uid="uid://dsvw8t7is3u0t"]
+[gd_scene load_steps=13 format=3 uid="uid://dsvw8t7is3u0t"]
 
 [ext_resource type="Script" path="res://Plane/Plane.cs" id="1_lmc2r"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/LiftSurface.cs" id="2_qa0fu"]
@@ -8,14 +8,13 @@
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/ControlSurface.cs" id="4_wgdki"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Thruster.cs" id="5_kube8"]
 [ext_resource type="Curve" uid="uid://dond8oomdh3bh" path="res://Plane/ControlCurve.tres" id="6_oclql"]
-[ext_resource type="Curve" uid="uid://bexio2txisd6a" path="res://Plane/ControlLiftCurve.tres" id="8_o43em"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/CenterOfGravity.cs" id="10_s0moc"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_cbfy7"]
 size = Vector2(6, 4)
 
 [sub_resource type="BoxMesh" id="BoxMesh_cq3by"]
-size = Vector3(1, 1, 10)
+size = Vector3(1, 1, 12)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_j4lcp"]
 size = Vector3(10.8634, 1, 9.25728)
@@ -23,20 +22,22 @@ size = Vector3(10.8634, 1, 9.25728)
 [node name="Plane" type="RigidBody3D"]
 mass = 18143.7
 center_of_mass_mode = 1
+custom_integrator = true
 can_sleep = false
-linear_velocity = Vector3(0, 0, -100)
+linear_velocity = Vector3(2.08165e-12, 2.08165e-12, -400)
 script = ExtResource("1_lmc2r")
 
 [node name="LiftEffectorLeft" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.9, 2.08165e-12, 2)
 script = ExtResource("2_qa0fu")
-liftCoefficient = 0.7
+liftCoefficient = 0.5
 ANGLEOFATTACKMAX = 90.0
 WINGAREA = 24.0
 liftCurve = ExtResource("3_e8pjb")
-x_area = 10.0
-y_area = 60.0
-drag_coefficient = 2.0
+x_area = 1.0
+y_area = 48.0
+z_area = 1.0
+drag_coefficient = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorLeft"]
 transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2, 0, 0)
@@ -44,15 +45,16 @@ mesh = SubResource("PlaneMesh_cbfy7")
 surface_material_override/0 = ExtResource("4_ro1k5")
 
 [node name="LiftEffectorRight" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 1.5)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
 script = ExtResource("2_qa0fu")
-liftCoefficient = 0.7
+liftCoefficient = 0.5
 ANGLEOFATTACKMAX = 90.0
 WINGAREA = 24.0
 liftCurve = ExtResource("3_e8pjb")
-x_area = 10.0
-y_area = 60.0
-drag_coefficient = 2.0
+x_area = 1.0
+y_area = 48.0
+z_area = 1.0
+drag_coefficient = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorRight"]
 transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -2, 0, 0)
@@ -60,14 +62,15 @@ mesh = SubResource("PlaneMesh_cbfy7")
 surface_material_override/0 = ExtResource("4_ro1k5")
 
 [node name="DragEffector" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 10)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
 script = ExtResource("3_ih2y8")
-x_area = 60.0
-z_area = 10.0
-drag_coefficient = 2.0
+x_area = 10.0
+y_area = 20.0
+z_area = 4.0
+drag_coefficient = 1.0
 
 [node name="MeshInstance3D" type="MeshInstance3D" parent="DragEffector"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
 mesh = SubResource("BoxMesh_cq3by")
 skeleton = NodePath("../..")
 surface_material_override/0 = ExtResource("4_ro1k5")
@@ -77,56 +80,49 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.709526)
 shape = SubResource("BoxShape3D_j4lcp")
 
 [node name="ControlEffectorPitchTail" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 12)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 10)
 script = ExtResource("4_wgdki")
-controlCoefficient = 4.0
+controlCoefficient = 5.0
 positiveAction = "PitchUp"
 negativeAction = "PitchDown"
-smoothing = 0.95
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 90.0
-liftCurve = ExtResource("8_o43em")
-y_area = 12.0
+y_area = 24.0
 drag_coefficient = 1.0
 
 [node name="ControlEffectorYawTail" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0, 0.677, 12)
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 1, 8)
 script = ExtResource("4_wgdki")
-controlCoefficient = 1.0
+maxControl = 35.0
 positiveAction = "YawRight"
 negativeAction = "YawLeft"
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 90.0
-liftCurve = ExtResource("8_o43em")
-y_area = 12.0
-drag_coefficient = 2.0
+y_area = 30.0
+drag_coefficient = 1.0
 
 [node name="ControlEffectorRollLeft" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 2.708)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.08165e-12, 4.50576)
 script = ExtResource("4_wgdki")
+maxControl = 20.0
 positiveAction = "RollRight"
 negativeAction = "RollLeft"
 smoothing = 0.0
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 90.0
-liftCurve = ExtResource("8_o43em")
-y_area = 2.0
-drag_coefficient = 0.25
+y_area = 4.0
+drag_coefficient = 1.0
 
 [node name="ControlEffectorRollRight" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2.708)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4.50576)
 script = ExtResource("4_wgdki")
+maxControl = 20.0
 positiveAction = "RollLeft"
 negativeAction = "RollRight"
 smoothing = 0.0
 controlCurve = ExtResource("6_oclql")
-ANGLEOFATTACKMAX = 90.0
-liftCurve = ExtResource("8_o43em")
-y_area = 2.0
-drag_coefficient = 0.25
+y_area = 4.0
+drag_coefficient = 1.0
 
 [node name="Thruster" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 4.75542)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 7)
 script = ExtResource("5_kube8")
 positiveAction = "Thrust"
 
