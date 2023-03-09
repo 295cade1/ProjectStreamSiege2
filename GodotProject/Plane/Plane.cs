@@ -6,6 +6,7 @@ public partial class Plane : RigidBody3D
 {
 	private PlaneEffector[] planeEffectors;
 	private Vector3 speed;
+	private Vector3 accelleration;
 	[Export]
 	private bool isLocked = true;
 	// Called when the node enters the scene tree for the first time.
@@ -25,6 +26,7 @@ public partial class Plane : RigidBody3D
 		foreach (PlaneEffector effector in planeEffectors) {
 			effector.applyPlaneEffectorForce(state);
 		}
+		accelleration = state.LinearVelocity - speed;
 		speed = state.LinearVelocity;
 		//GD.Print(state.LinearVelocity.Length());
 		if (isLocked) {state.LinearVelocity = new Vector3(0, state.LinearVelocity.Y, 0); }
@@ -53,5 +55,8 @@ public partial class Plane : RigidBody3D
 
 	public Vector3 getSpeed() {
 		return speed;
+	}
+	public Vector3 getAccelleration() {
+		return accelleration;
 	}
 }

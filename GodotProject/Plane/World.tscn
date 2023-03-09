@@ -1,6 +1,7 @@
-[gd_scene load_steps=8 format=3 uid="uid://bvmpbvvl3ea1p"]
+[gd_scene load_steps=9 format=3 uid="uid://bvmpbvvl3ea1p"]
 
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
+[ext_resource type="Script" path="res://Plane/Camera.cs" id="2_0exnf"]
 [ext_resource type="PackedScene" uid="uid://b20wgbm8gsb56" path="res://World/Terrain/Terrain.tscn" id="2_6c1ba"]
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_l6y4e"]
@@ -18,6 +19,7 @@ sky = SubResource("Sky_qsbnv")
 ambient_light_source = 3
 reflected_light_source = 2
 tonemap_mode = 3
+sdfgi_enabled = true
 fog_density = 0.0001
 volumetric_fog_density = 0.01
 
@@ -32,9 +34,12 @@ dof_blur_far_transition = 1000.0
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 30.3921, 0)
 linear_velocity = Vector3(2.08165e-12, 2.08165e-12, -300)
 
-[node name="Camera3D" type="Camera3D" parent="Plane"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 10, 20)
+[node name="Camera3D" type="Camera3D" parent="Plane" node_paths=PackedStringArray("plane")]
 attributes = SubResource("CameraAttributesPractical_l6y4e")
+current = true
+fov = 90.0
+script = ExtResource("2_0exnf")
+plane = NodePath("..")
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
 transform = Transform3D(0.447861, -0.513627, 0.731853, -0.891977, -0.313082, 0.326124, 0.0616239, -0.798854, -0.59836, 0, 43.1016, 0)

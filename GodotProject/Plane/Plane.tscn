@@ -82,7 +82,8 @@ shape = SubResource("BoxShape3D_j4lcp")
 [node name="ControlEffectorPitchTail" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 10)
 script = ExtResource("4_wgdki")
-controlCoefficient = 5.0
+controlCoefficient = 4.0
+maxControl = 70.0
 positiveAction = "PitchUp"
 negativeAction = "PitchDown"
 controlCurve = ExtResource("6_oclql")
@@ -92,7 +93,6 @@ drag_coefficient = 1.0
 [node name="ControlEffectorYawTail" type="Node3D" parent="."]
 transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 2.08165e-12, 1, 8)
 script = ExtResource("4_wgdki")
-maxControl = 35.0
 positiveAction = "YawRight"
 negativeAction = "YawLeft"
 controlCurve = ExtResource("6_oclql")
@@ -102,10 +102,10 @@ drag_coefficient = 1.0
 [node name="ControlEffectorRollLeft" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.08165e-12, 4.50576)
 script = ExtResource("4_wgdki")
-maxControl = 20.0
+maxControl = 30.0
 positiveAction = "RollRight"
 negativeAction = "RollLeft"
-smoothing = 0.0
+smoothing = 0.1
 controlCurve = ExtResource("6_oclql")
 y_area = 4.0
 drag_coefficient = 1.0
@@ -113,10 +113,10 @@ drag_coefficient = 1.0
 [node name="ControlEffectorRollRight" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4.50576)
 script = ExtResource("4_wgdki")
-maxControl = 20.0
+maxControl = 30.0
 positiveAction = "RollLeft"
 negativeAction = "RollRight"
-smoothing = 0.0
+smoothing = 0.1
 controlCurve = ExtResource("6_oclql")
 y_area = 4.0
 drag_coefficient = 1.0
