@@ -1,25 +1,29 @@
 shader_type spatial;
+render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
 
 const int HASHSIZE = 32;
 const float renderDist = 4096.0f;
 uniform vec3 points[1024];
 uniform sampler2D riverGradient;
-
 uniform float maxHeight;
-
-varying float HEIGHT;
 
 uniform vec3 position;
 
-varying vec3 Nrml;
+uniform sampler2D grassTexture : source_color,filter_linear_mipmap_anisotropic,repeat_enable;
+uniform sampler2D grassNormal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform sampler2D rockTexture : source_color,filter_linear_mipmap,repeat_enable;
+uniform sampler2D rockNormal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+
+varying vec3 uv1_triplanar_pos;
+uniform float uv1_blend_sharpness;
+varying vec3 uv1_power_normal;
+uniform vec3 uv1_scale;
+uniform vec3 uv1_offset;
 
 
-void fragment() {
-	ALBEDO = vec3(HEIGHT);
-	METALLIC = 0.0;
-	ROUGHNESS = 0.8;
-}
+varying float HEIGHT;
 
+varying vec2 texPos;
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -93,6 +97,8 @@ float snoise(vec2 v)
   return ((130.0 * dot(m, g)) + 1.0f) / 2.0f;
 }
 
+
+
 int cursedHash(vec2 point){
 	int hashDivide = int(renderDist * 2.0f) / HASHSIZE;
 	int x = int(floor((point.x + renderDist) / float(hashDivide)));
@@ -115,18 +121,38 @@ float getHeight(vec3 point){
 void vertex() {
 	
 	HEIGHT = getHeight(VERTEX);
-	
+	texPos = VERTEX.xz;
 	NORMAL = normalize( vec3(
-		(HEIGHT - getHeight(VERTEX + vec3(0.05f,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(0.05f,0,0))) * 10.0f,
-		0.005f,
-		HEIGHT - getHeight(VERTEX + vec3(0,0,0.05f)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,0.05f))) * 10.0f
+		(HEIGHT - getHeight(VERTEX + vec3(1.0f,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(1.0f,0,0))) * 10.0f,
+		0.05f,
+		HEIGHT - getHeight(VERTEX + vec3(0,0,1.0f)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,1.0f))) * 10.0f
 		) );
 
 	VERTEX.y = VERTEX.y + HEIGHT * maxHeight;
+	
+	uv1_power_normal=pow(abs(NORMAL),vec3(uv1_blend_sharpness));
+	uv1_triplanar_pos = (VERTEX - position) * uv1_scale + uv1_offset;
+	uv1_power_normal/=dot(uv1_power_normal,vec3(1.0));
+	uv1_triplanar_pos *= vec3(1.0,-1.0, 1.0);
 }
 
 
+vec4 triplanar_texture(sampler2D p_sampler,vec3 p_weights,vec3 p_triplanar_pos) {
+	vec4 samp=vec4(0.0);
+	samp+= texture(p_sampler,p_triplanar_pos.xy) * p_weights.z;
+	samp+= texture(p_sampler,p_triplanar_pos.xz) * p_weights.y;
+	samp+= texture(p_sampler,p_triplanar_pos.zy * vec2(-1.0,1.0)) * p_weights.x;
 
+	return samp;
+}
+
+
+void fragment() {
+	ALBEDO = triplanar_texture(grassTexture, uv1_power_normal, uv1_triplanar_pos).rgb;
+	NORMAL_MAP += triplanar_texture(grassNormal, uv1_power_normal, uv1_triplanar_pos).rgb;
+	METALLIC = 0.12;
+	ROUGHNESS = 0.98;
+}
 
 
 

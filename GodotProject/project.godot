@@ -20,6 +20,14 @@ config/icon="res://icon.svg"
 
 Draw3d="*res://Debug/Draw3d.gd"
 
+[display]
+
+window/size/viewport_width=1920
+window/size/viewport_height=1080
+window/size/mode=3
+window/stretch/mode="viewport"
+window/stretch/aspect="ignore"
+
 [dotnet]
 
 project/assembly_name="StreamSiegePlane"
@@ -69,6 +77,6 @@ YawRight={
 
 [rendering]
 
-anti_aliasing/quality/msaa_2d=2
-anti_aliasing/quality/msaa_3d=2
+anti_aliasing/quality/msaa_2d=1
+anti_aliasing/quality/msaa_3d=1
 anti_aliasing/quality/use_taa=true

@@ -1,0 +1,264 @@
+{
+	"connections": [
+		{
+			"from": "fbm2",
+			"from_port": 0,
+			"to": "colorize",
+			"to_port": 0
+		},
+		{
+			"from": "dirt",
+			"from_port": 0,
+			"to": "colorize_2",
+			"to_port": 0
+		},
+		{
+			"from": "colorize_2",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 1
+		},
+		{
+			"from": "colorize",
+			"from_port": 0,
+			"to": "blend2",
+			"to_port": 0
+		},
+		{
+			"from": "clouds_noise",
+			"from_port": 0,
+			"to": "normal_map2",
+			"to_port": 0
+		},
+		{
+			"from": "blend2",
+			"from_port": 0,
+			"to": "make_tileable",
+			"to_port": 0
+		},
+		{
+			"from": "make_tileable",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 0
+		},
+		{
+			"from": "normal_map2",
+			"from_port": 0,
+			"to": "make_tileable_2",
+			"to_port": 0
+		},
+		{
+			"from": "make_tileable_2",
+			"from_port": 0,
+			"to": "Material",
+			"to_port": 4
+		}
+	],
+	"label": "Graph",
+	"longdesc": "",
+	"name": "@@284",
+	"node_position": {
+		"x": 0,
+		"y": 0
+	},
+	"nodes": [
+		{
+			"export_paths": {
+
+			},
+			"name": "Material",
+			"node_position": {
+				"x": 575.555603,
+				"y": -31.099627
+			},
+			"parameters": {
+				"albedo_color": {
+					"a": 1,
+					"b": 1,
+					"g": 1,
+					"r": 1,
+					"type": "Color"
+				},
+				"ao": 1,
+				"depth_scale": 0.5,
+				"emission_energy": 1,
+				"flags_transparent": true,
+				"metallic": 0,
+				"normal": 1,
+				"roughness": 1,
+				"size": 11,
+				"sss": 1
+			},
+			"seed_int": 0,
+			"type": "material"
+		},
+		{
+			"name": "fbm2",
+			"node_position": {
+				"x": -459.277771,
+				"y": -235.887451
+			},
+			"parameters": {
+				"folds": 0,
+				"iterations": 10,
+				"noise": 0,
+				"offset": 0,
+				"persistence": 0.7,
+				"scale_x": 4,
+				"scale_y": 4
+			},
+			"seed_int": 0,
+			"type": "fbm2"
+		},
+		{
+			"name": "colorize",
+			"node_position": {
+				"x": -218.166687,
+				"y": -237.568268
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 1,
+							"b": 0,
+							"g": 0.324046,
+							"pos": 0,
+							"r": 0.055093
+						},
+						{
+							"a": 1,
+							"b": 0.172857,
+							"g": 0.764421,
+							"pos": 1,
+							"r": 0.273433
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"name": "dirt",
+			"node_position": {
+				"x": -379.833374,
+				"y": 23.461258
+			},
+			"parameters": {
+				"d_scale": 1,
+				"param0": 0,
+				"param1": 11
+			},
+			"seed_int": 0,
+			"type": "dirt"
+		},
+		{
+			"name": "colorize_2",
+			"node_position": {
+				"x": -183.166702,
+				"y": 32.332115
+			},
+			"parameters": {
+				"gradient": {
+					"interpolation": 1,
+					"points": [
+						{
+							"a": 0,
+							"b": 0.229318,
+							"g": 0.259268,
+							"pos": 0,
+							"r": 0.425745
+						},
+						{
+							"a": 1,
+							"b": 0.193464,
+							"g": 0.193464,
+							"pos": 0.749495,
+							"r": 0.334892
+						}
+					],
+					"type": "Gradient"
+				}
+			},
+			"seed_int": 0,
+			"type": "colorize"
+		},
+		{
+			"generic_size": 1,
+			"name": "blend2",
+			"node_position": {
+				"x": 8.500015,
+				"y": -29.754627
+			},
+			"parameters": {
+				"amount1": 1,
+				"blend_type1": 11
+			},
+			"seed_int": 0,
+			"type": "blend2"
+		},
+		{
+			"name": "clouds_noise",
+			"node_position": {
+				"x": -260.388916,
+				"y": 337.234314
+			},
+			"parameters": {
+				"n_scale": 1,
+				"param0": 11,
+				"param1": 0
+			},
+			"seed_int": 0,
+			"type": "clouds_noise"
+		},
+		{
+			"name": "normal_map2",
+			"node_position": {
+				"x": 27.388855,
+				"y": 237.369003
+			},
+			"parameters": {
+				"buffer": 1,
+				"param2": 0,
+				"size": 10,
+				"strength": 0.1
+			},
+			"seed_int": 0,
+			"type": "normal_map2"
+		},
+		{
+			"name": "make_tileable",
+			"node_position": {
+				"x": 349.298706,
+				"y": -9.170919
+			},
+			"parameters": {
+				"w": 0.25
+			},
+			"seed_int": 0,
+			"type": "make_tileable"
+		},
+		{
+			"name": "make_tileable_2",
+			"node_position": {
+				"x": 250.298615,
+				"y": 219.845703
+			},
+			"parameters": {
+				"w": 1
+			},
+			"seed_int": 0,
+			"type": "make_tileable"
+		}
+	],
+	"parameters": {
+
+	},
+	"seed_int": 0,
+	"shortdesc": "",
+	"type": "graph"
+}

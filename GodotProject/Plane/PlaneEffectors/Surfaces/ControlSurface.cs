@@ -22,14 +22,13 @@ public partial class ControlSurface : DragSurface
 
 	public override Vector3 getSurfaceForce(Vector3 velocity){
 		float angleOfAttack = orthographicProjection(this.GlobalTransform.Basis.X, velocity.Normalized()).SignedAngleTo(orthographicProjection(this.GlobalTransform.Basis.X, -this.GlobalTransform.Basis.Z.Normalized()), this.GlobalTransform.Basis.X.Normalized()) / (2 * Mathf.Pi) * 360;
-		//GD.Print(angleOfAttack);
 		controlAmount = Mathf.Clamp(calculateActivation() * (1 - smoothing) + controlAmount * smoothing,-1.0f,1.0f);
 		float controlAngle = controlAmount * maxControl;
 		float totalAngle = ((angleOfAttack + controlAngle) * (2 * Mathf.Pi) / 360);
 		float controlForce = Mathf.Sin(totalAngle) * 0.5f * AIRDENSITY * velocity.Length() * velocity.Length() * y_area * drag_coefficient;
 		Vector3 control = this.GlobalTransform.Basis.Y.Normalized() * controlForce;
 
-		GD.Print(this.Name + "Controlling: " + controlForce + "Angles: (AOA, control, Total)" + angleOfAttack + " " + controlAngle + " " + totalAngle + "ControlActivation" + controlAmount);
+		//GD.Print(this.Name + "Controlling: " + controlForce + "Angles: (AOA, control, Total)" + angleOfAttack + " " + controlAngle + " " + totalAngle + "ControlActivation" + controlAmount);
 		
 		return control + base.getSurfaceForce(velocity);
 	}
