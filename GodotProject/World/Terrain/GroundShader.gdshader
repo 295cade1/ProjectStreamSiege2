@@ -98,8 +98,6 @@ float snoise(vec2 v)
   return ((130.0 * dot(m, g)) + 1.0f) / 2.0f;
 }
 
-
-
 int cursedHash(vec2 point){
 	int hashDivide = int(renderDist * 2.0f) / HASHSIZE;
 	int x = int(floor((point.x + renderDist) / float(hashDivide)));
@@ -142,10 +140,11 @@ void vertex() {
 	HEIGHT = getHeight(VERTEX);
 	texPos = VERTEX.xz + position.xz;
 	//VERTEX.xz = VERTEX.xz + addNoise(VERTEX - position);
+	float off = (8192.0f / 128.0f) * 1.0f;
 	NORMAL = normalize( vec3(
-		(HEIGHT - getHeight(VERTEX + vec3(1.0f,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(1.0f,0,0))) * 10.0f,
-		0.05f,
-		HEIGHT - getHeight(VERTEX + vec3(0,0,1.0f)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,1.0f))) * 10.0f
+		(HEIGHT - getHeight(VERTEX + vec3(off,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(off,0,0))),
+		1.0f,
+		HEIGHT - getHeight(VERTEX + vec3(0,0,off)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,off)))
 		) );
 	NRML = NORMAL;
 	VERTEX.y = VERTEX.y + HEIGHT * maxHeight;
@@ -175,7 +174,7 @@ float clampColor(float i, float clampVal) {
 }
 
 vec3 groundAlbedo(){
-	vec3 color = mix(sandColor.rgb, mix(grassColor.rgb, rockColor.rgb, clamp(length(NRML.xz) * 10.0f, 0.0f, 1.0f)), clamp(ceil(HEIGHT), 0.0f, 1.0f));
+	vec3 color = mix(sandColor.rgb, mix(grassColor.rgb, rockColor.rgb, clamp(length(NRML.xz) * 20.0f, 0.0f, 1.0f)), clamp(ceil(HEIGHT), 0.0f, 1.0f));
 	vec3 tri_pos = vec3(round(uv1_triplanar_pos.x * 5.0f), round(uv1_triplanar_pos.y * 5.0f), round(uv1_triplanar_pos.z * 5.0f));
 	return (color)
 	 * (vec3( clampColor( (snoise(tri_pos.xz * 1.1f) + snoise(tri_pos.xy * 1.7) + snoise(tri_pos.zy * 2.3f) ) / 3.0f, 0.4f) ) 
