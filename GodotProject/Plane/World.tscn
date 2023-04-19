@@ -6,6 +6,7 @@
 
 [sub_resource type="CameraAttributesPractical" id="CameraAttributesPractical_l6y4e"]
 dof_blur_far_enabled = true
+dof_blur_far_distance = 1000.0
 
 [sub_resource type="PhysicalSkyMaterial" id="PhysicalSkyMaterial_6m25r"]
 turbidity = 1.0
@@ -57,5 +58,4 @@ camera_attributes = SubResource("CameraAttributesPractical_48oly")
 
 [node name="Terrain" parent="." instance=ExtResource("2_6c1ba")]
 custom_aabb = AABB(-2048, 0, -2048, 4096, 4000, 4096)
-gi_mode = 2
 plane = NodePath("../Plane")

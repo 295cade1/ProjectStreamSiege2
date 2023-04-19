@@ -32,6 +32,7 @@ shader_parameter/riverGradient = SubResource("GradientTexture1D_beep7")
 
 [node name="Terrain" type="MeshInstance3D"]
 transform = Transform3D(1, -6.62645e-05, -0.000416764, 6.59978e-05, 1, -0.000662408, 0.000416806, 0.000662382, 1, 0, -100, 0)
+gi_mode = 2
 mesh = SubResource("PlaneMesh_tb7rf")
 surface_material_override/0 = SubResource("ShaderMaterial_r550c")
 script = ExtResource("2_wr7jl")

@@ -21,6 +21,8 @@ public partial class Camera : Camera3D
 	[Export]
 	float cameraUpOffset = 5.0f;
 
+	Vector3 previousAccelleration;
+
 	private Vector3 previousAccellerationOffset = new Vector3(0,0,0);
 	// Called when the node enters the scene tree for the first time.
 	public override void _Ready() {
@@ -39,9 +41,17 @@ public partial class Camera : Camera3D
 
 		Vector3 camDir = getCameraTargetDirection();
 		Vector3 camPos = getCameraPos(camDir, distance) + planeAccellOffset;
+		//Vector3 camPos = vecLerp(previousPosition, newCamPos, (float)delta * 100f);
+		//previousPosition = camPos;
 		this.LookAtFromPosition(camPos, camPos + camDir, Vector3.Up);
+	}
 
-
+	private Vector3 vecLerp(Vector3 v1, Vector3 v2, float l) {
+		return new Vector3(
+			Mathf.Lerp(v1.X, v2.X, l),
+			Mathf.Lerp(v1.Y, v2.Y, l),
+			Mathf.Lerp(v1.Z, v2.Z, l)
+		);
 	}
 
 	private float getPlaneSpeedAmount() {
