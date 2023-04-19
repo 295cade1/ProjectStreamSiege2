@@ -1,20 +1,14 @@
-[gd_scene load_steps=13 format=3 uid="uid://dsvw8t7is3u0t"]
+[gd_scene load_steps=11 format=3 uid="uid://dsvw8t7is3u0t"]
 
 [ext_resource type="Script" path="res://Plane/Plane.cs" id="1_lmc2r"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/LiftSurface.cs" id="2_qa0fu"]
 [ext_resource type="Curve" uid="uid://xb6gdoxwf2x4" path="res://Plane/LiftCurve.tres" id="3_e8pjb"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/DragSurface.cs" id="3_ih2y8"]
-[ext_resource type="Material" uid="uid://bp08ilt4bjlyn" path="res://Materials/Metal.tres" id="4_ro1k5"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Surfaces/ControlSurface.cs" id="4_wgdki"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/Thruster.cs" id="5_kube8"]
 [ext_resource type="Curve" uid="uid://dond8oomdh3bh" path="res://Plane/ControlCurve.tres" id="6_oclql"]
+[ext_resource type="PackedScene" uid="uid://b2ecb22n5t1d4" path="res://Assets/Plane/Plane.glb" id="9_ynfpq"]
 [ext_resource type="Script" path="res://Plane/PlaneEffectors/CenterOfGravity.cs" id="10_s0moc"]
-
-[sub_resource type="PlaneMesh" id="PlaneMesh_cbfy7"]
-size = Vector2(6, 4)
-
-[sub_resource type="BoxMesh" id="BoxMesh_cq3by"]
-size = Vector3(1, 1, 12)
 
 [sub_resource type="BoxShape3D" id="BoxShape3D_j4lcp"]
 size = Vector3(10.8634, 1, 9.25728)
@@ -39,11 +33,6 @@ y_area = 48.0
 z_area = 1.0
 drag_coefficient = 1.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorLeft"]
-transform = Transform3D(0.707107, 0, 0.707107, 0, 1, 0, -0.707107, 0, 0.707107, 2, 0, 0)
-mesh = SubResource("PlaneMesh_cbfy7")
-surface_material_override/0 = ExtResource("4_ro1k5")
-
 [node name="LiftEffectorRight" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 2)
 script = ExtResource("2_qa0fu")
@@ -56,11 +45,6 @@ y_area = 48.0
 z_area = 1.0
 drag_coefficient = 1.0
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="LiftEffectorRight"]
-transform = Transform3D(0.707107, 0, -0.707107, 0, 1, 0, 0.707107, 0, 0.707107, -2, 0, 0)
-mesh = SubResource("PlaneMesh_cbfy7")
-surface_material_override/0 = ExtResource("4_ro1k5")
-
 [node name="DragEffector" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
 script = ExtResource("3_ih2y8")
@@ -68,12 +52,6 @@ x_area = 10.0
 y_area = 20.0
 z_area = 4.0
 drag_coefficient = 1.0
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="DragEffector"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 2.08165e-12)
-mesh = SubResource("BoxMesh_cq3by")
-skeleton = NodePath("../..")
-surface_material_override/0 = ExtResource("4_ro1k5")
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, -0.709526)
@@ -128,3 +106,6 @@ positiveAction = "Thrust"
 
 [node name="CoG" type="Node3D" parent="."]
 script = ExtResource("10_s0moc")
+
+[node name="Plane" parent="." instance=ExtResource("9_ynfpq")]
+transform = Transform3D(-1, 3.48787e-16, 8.74228e-08, 3.48787e-16, 1, -3.48787e-16, -8.74228e-08, -3.48787e-16, -1, 0, 0, 0)
