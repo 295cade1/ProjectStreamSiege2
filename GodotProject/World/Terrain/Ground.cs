@@ -1,6 +1,7 @@
 using Godot;
 using System;
 using System.Linq;
+using System.Collections.Generic;
 
 public partial class Ground : MeshInstance3D
 {
@@ -15,7 +16,7 @@ public partial class Ground : MeshInstance3D
 	TerrainGenerator[] generators;
 	Vector3[] points;
 
-	float renderDist = 4096;
+	static float renderDist = 4096;
 
 	[Export]
 	int MAXPOINTS = 256;
@@ -23,7 +24,9 @@ public partial class Ground : MeshInstance3D
 	[Export]
 	int HASHSIZE = 32;
 
-	int vertDiff = (int)8192/128;
+	float vertDiff = 8192/128;
+
+	float LOD_range = 8192/128;
 
 
 	public override void _Ready()
@@ -32,6 +35,7 @@ public partial class Ground : MeshInstance3D
 		pointsPosition = new Vector3(0,0,0);
 		planeRef = GetNode<Plane>(plane);
 		mat = (ShaderMaterial)this.GetSurfaceOverrideMaterial(0);
+		//initMesh();
 		initPoints();
 		initGenerators();
 	}
@@ -49,10 +53,85 @@ public partial class Ground : MeshInstance3D
 		points[0] = new Vector3(0,500,0);
 	}
 
+	private void initMesh() {
+		int meshSize = Mathf.CeilToInt(renderDist) * 2;
+		
+		// Initialize the ArrayMesh.
+		var arrMesh = new ArrayMesh();
+		var arrays = new Godot.Collections.Array();
+		arrays.Resize((int)Mesh.ArrayType.Max);
+		arrays[(int)Mesh.ArrayType.Vertex] = makePlane();
+
+		// Create the Mesh.
+		arrMesh.AddSurfaceFromArrays(Mesh.PrimitiveType.Triangles, arrays);
+		this.Mesh = arrMesh;
+	}
+
+	private Vector3[] makePlane(){
+		List<Vector3> verts = new List<Vector3>();
+		float size = vertDiff;
+		float LOD = 1;
+		makeSquare(ref verts, 0, 0, 0, size);
+		for (float i = vertDiff; i < renderDist; i += size * LOD) {
+			if (i > Mathf.Pow(LOD_range, LOD)) {
+				LOD += 1;
+				size *= 2;
+			}
+			makePerimiter(ref verts, i, -LOD * 10, i, size * LOD);
+		}
+		
+		GD.Print(verts.Count);
+		return verts.ToArray();
+	}
+
+	private void makePerimiter(ref List<Vector3> verts, float x, float y, float z, float size) {
+		Vector3 SW = new Vector3(-x, y, -z);
+		Vector3 SE = new Vector3( x, y, -z);
+		Vector3 NW = new Vector3(-x, y,  z);
+		Vector3 NE = new Vector3( x, y,  z);
+		makeStrip(ref verts, SW, SE, size);
+		makeStrip(ref verts, NW, NE, size);
+		makeStrip(ref verts, SW, NW, size);
+		makeStrip(ref verts, SE, NE, size);
+
+	}
+
+	private void makeStrip(ref List<Vector3> verts, Vector3 start, Vector3 end, float size) {
+		Vector3 move = (end - start).Normalized() * size;
+		Vector3 point;
+		for (point = start; end.DistanceSquaredTo(point) >= size * size; point += move) {
+			makeSquare(ref verts, point.X, point.Y, point.Z, size);
+		}
+		makeSquare(ref verts, point.X, point.Y, point.Z, size);
+	}
+
+	private void makeSquare(ref List<Vector3> verts, float x, float y, float z, float size) {
+		float halfSize = size / 2.0f;
+		Vector3 SW = new Vector3(x - halfSize, y, z - halfSize);
+		Vector3 SE = new Vector3(x + halfSize, y, z - halfSize);
+		Vector3 NW = new Vector3(x - halfSize, y, z + halfSize);
+		Vector3 NE = new Vector3(x + halfSize, y, z + halfSize);
+		verts.Add(SE);
+		verts.Add(NE);
+		verts.Add(NW);
+
+		verts.Add(SE);
+		verts.Add(NW);
+		verts.Add(SW);
+	}
+
+	public Vector3 addNoise(Vector3 point) {
+		return point + new Vector3(noiseHash(point.X), noiseHash(point.Y), noiseHash(point.Z));
+	}
+
+	private float noiseHash(float val) {
+		return fmod(((val * 2531) / 1289), 1.0f);
+	}
+
 	public override void _Process(double delta)
 	{
-		updatePosition(delta);
 		updatePoints();
+		updatePosition(delta);
 		updateGroundShader();
 	}
 
@@ -101,9 +180,9 @@ public partial class Ground : MeshInstance3D
 		if(Mathf.Abs(i) < m){
 			return i;
 		}else if(i < 0){
-			return fmod(i + m, m);
+			return i + (Mathf.Floor(Mathf.Abs(i) / m)) * m;
 		}else{
-			return fmod(i - m, m);
+			return i - (Mathf.Floor(Mathf.Abs(i) / m)) * m;
 		}
 	}
 

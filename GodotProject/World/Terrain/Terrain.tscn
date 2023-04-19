@@ -1,10 +1,7 @@
-[gd_scene load_steps=10 format=3 uid="uid://b20wgbm8gsb56"]
+[gd_scene load_steps=7 format=3 uid="uid://b20wgbm8gsb56"]
 
 [ext_resource type="Shader" path="res://World/Terrain/GroundShader.gdshader" id="1_wx65k"]
-[ext_resource type="Texture2D" uid="uid://cr47reyo2f13m" path="res://Materials/MaterialMaker/Grass/Grass_normal.png" id="2_6jn7w"]
-[ext_resource type="Texture2D" uid="uid://bacimfxqrjmm0" path="res://Textures/Debug/Debug1.png" id="2_neutw"]
 [ext_resource type="Script" path="res://World/Terrain/Ground.cs" id="2_wr7jl"]
-[ext_resource type="Texture2D" uid="uid://bxolxyxle7gr1" path="res://Materials/MaterialMaker/Grass/Grass_albedo.png" id="3_trlha"]
 
 [sub_resource type="PlaneMesh" id="PlaneMesh_tb7rf"]
 custom_aabb = AABB(-2048, 0, -2048, 4096, 4000, 4096)
@@ -25,16 +22,18 @@ shader = ExtResource("1_wx65k")
 shader_parameter/points = PackedVector3Array()
 shader_parameter/maxHeight = 2000.0
 shader_parameter/position = Vector3(1, 0, 0)
+shader_parameter/grassColor = Color(0.356863, 0.768627, 0.305882, 1)
+shader_parameter/sandColor = Color(1, 0.882353, 0.627451, 1)
+shader_parameter/rockColor = Color(0.427451, 0.427451, 0.427451, 1)
 shader_parameter/uv1_blend_sharpness = 1.0
 shader_parameter/uv1_scale = Vector3(0.05, 0.05, 0.05)
 shader_parameter/uv1_offset = null
 shader_parameter/riverGradient = SubResource("GradientTexture1D_beep7")
-shader_parameter/grassTexture = ExtResource("3_trlha")
-shader_parameter/grassNormal = ExtResource("2_6jn7w")
-shader_parameter/rockTexture = ExtResource("2_neutw")
 
 [node name="Terrain" type="MeshInstance3D"]
 transform = Transform3D(1, -6.62645e-05, -0.000416764, 6.59978e-05, 1, -0.000662408, 0.000416806, 0.000662382, 1, 0, -100, 0)
 mesh = SubResource("PlaneMesh_tb7rf")
 surface_material_override/0 = SubResource("ShaderMaterial_r550c")
 script = ExtResource("2_wr7jl")
+
+[node name="Node" type="Node" parent="."]

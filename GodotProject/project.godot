@@ -24,7 +24,6 @@ Draw3d="*res://Debug/Draw3d.gd"
 
 window/size/viewport_width=1920
 window/size/viewport_height=1080
-window/size/mode=3
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
 
@@ -77,6 +76,6 @@ YawRight={
 
 [rendering]
 
+renderer/rendering_method="mobile"
 anti_aliasing/quality/msaa_2d=1
-anti_aliasing/quality/msaa_3d=1
-anti_aliasing/quality/use_taa=true
+anti_aliasing/quality/msaa_3d=2

@@ -1,5 +1,5 @@
 shader_type spatial;
-render_mode blend_mix,depth_draw_opaque,cull_back,diffuse_burley,specular_schlick_ggx;
+render_mode blend_mix,depth_prepass_alpha,cull_back,diffuse_burley,specular_schlick_ggx;
 
 const int HASHSIZE = 32;
 const float renderDist = 4096.0f;
@@ -9,10 +9,9 @@ uniform float maxHeight;
 
 uniform vec3 position;
 
-uniform sampler2D grassTexture : source_color,filter_linear_mipmap_anisotropic,repeat_enable;
-uniform sampler2D grassNormal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
-uniform sampler2D rockTexture : source_color,filter_linear_mipmap,repeat_enable;
-uniform sampler2D rockNormal : hint_normal, filter_linear_mipmap_anisotropic, repeat_enable;
+uniform vec4 grassColor: source_color;
+uniform vec4 sandColor : source_color;
+uniform vec4 rockColor : source_color;
 
 varying vec3 uv1_triplanar_pos;
 uniform float uv1_blend_sharpness;
@@ -24,6 +23,8 @@ uniform vec3 uv1_offset;
 varying float HEIGHT;
 
 varying vec2 texPos;
+
+varying vec3 NRML;
 
 //
 // Description : Array and textureless GLSL 2D simplex noise function.
@@ -106,28 +107,47 @@ int cursedHash(vec2 point){
 	return x + y * HASHSIZE;
 }
 
-float getHeight(vec3 point){
+float getHeight(vec3 point) {
 	float height = 1.0f;
 	for (int i = cursedHash(point.xz) - HASHSIZE * 2; (i < points.length()) && (i < cursedHash(point.xz) + HASHSIZE * 2); i++) {
-			    float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, point.xz) / (points[i].y * 1.5f), 0.01f, 1.0f), 0.5f)).r;
-	        if (newHeight < height) {height = newHeight;}
+		float newHeight = 1.0f - texture(riverGradient, vec2(clamp(distance(points[i].xz, point.xz) / (points[i].y * 1.5f), 0.01f, 1.0f), 0.5f)).r;
+		if (newHeight < height) {height = newHeight;}
 	}
 	vec3 pos = -position + point;
 	height -= snoise(pos.xz / 8196.0f * 3.0f) * 0.3 + snoise(pos.xz / 8196.0f * 12.0f) * 0.1;
-	height = clamp(height, 0.0f, 1.0f);
+	//height = clamp(height, 0.0f, 1.0f);
 	return height;
+}
+
+float fmod(float i, float m){
+	if(abs(i) < m){
+		return i;
+	}else if(i < 0.0f){
+		return i + (floor(abs(i) / m)) * m;
+	}else{
+		return i - (floor(abs(i) / m)) * m;
+	}
+}
+
+float noiseHash(float val) {
+	return fmod(((val * 2531.0f) / 1289.0f), 4.0f);
+}
+
+vec2 addNoise(vec3 point) {
+	return (vec3(noiseHash(point.x), noiseHash(point.y), noiseHash(point.z))).xz;
 }
 
 void vertex() {
 	
 	HEIGHT = getHeight(VERTEX);
-	texPos = VERTEX.xz;
+	texPos = VERTEX.xz + position.xz;
+	//VERTEX.xz = VERTEX.xz + addNoise(VERTEX - position);
 	NORMAL = normalize( vec3(
 		(HEIGHT - getHeight(VERTEX + vec3(1.0f,0,0))) - (HEIGHT - getHeight(VERTEX - vec3(1.0f,0,0))) * 10.0f,
 		0.05f,
 		HEIGHT - getHeight(VERTEX + vec3(0,0,1.0f)) - (HEIGHT - getHeight(VERTEX - vec3(0,0,1.0f))) * 10.0f
 		) );
-
+	NRML = NORMAL;
 	VERTEX.y = VERTEX.y + HEIGHT * maxHeight;
 	
 	uv1_power_normal=pow(abs(NORMAL),vec3(uv1_blend_sharpness));
@@ -146,13 +166,30 @@ vec4 triplanar_texture(sampler2D p_sampler,vec3 p_weights,vec3 p_triplanar_pos) 
 	return samp;
 }
 
+float clampColor(float i, float clampVal) {
+	if (i > clampVal) {
+		return 0.5f;
+	}else{
+		return 0.1f;
+	}
+}
+
+vec3 groundAlbedo(){
+	vec3 color = mix(sandColor.rgb, mix(grassColor.rgb, rockColor.rgb, clamp(length(NRML.xz) * 10.0f, 0.0f, 1.0f)), clamp(ceil(HEIGHT), 0.0f, 1.0f));
+	vec3 tri_pos = vec3(round(uv1_triplanar_pos.x * 5.0f), round(uv1_triplanar_pos.y * 5.0f), round(uv1_triplanar_pos.z * 5.0f));
+	return (color)
+	 * (vec3( clampColor( (snoise(tri_pos.xz * 1.1f) + snoise(tri_pos.xy * 1.7) + snoise(tri_pos.zy * 2.3f) ) / 3.0f, 0.4f) ) 
+	 +  vec3( clampColor( (snoise(tri_pos.xz * 0.3f) + snoise(tri_pos.xy * 0.5) + snoise(tri_pos.zy * 0.7) ) / 3.0f, 0.4f) ) );
+}
 
 void fragment() {
-	ALBEDO = triplanar_texture(grassTexture, uv1_power_normal, uv1_triplanar_pos).rgb;
-	NORMAL_MAP += triplanar_texture(grassNormal, uv1_power_normal, uv1_triplanar_pos).rgb;
+	ALBEDO = groundAlbedo();
 	METALLIC = 0.12;
 	ROUGHNESS = 0.98;
+	//ALPHA = ceil(HEIGHT);
 }
+
+
 
 
 
