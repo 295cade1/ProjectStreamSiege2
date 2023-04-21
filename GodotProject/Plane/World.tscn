@@ -1,4 +1,4 @@
-[gd_scene load_steps=9 format=3 uid="uid://bvmpbvvl3ea1p"]
+[gd_scene load_steps=11 format=3 uid="uid://bvmpbvvl3ea1p"]
 
 [ext_resource type="PackedScene" uid="uid://dsvw8t7is3u0t" path="res://Plane/Plane.tscn" id="1_qnrsq"]
 [ext_resource type="Script" path="res://Plane/Camera.cs" id="2_0exnf"]
@@ -27,6 +27,16 @@ volumetric_fog_density = 0.01
 dof_blur_far_enabled = true
 dof_blur_far_distance = 4000.0
 dof_blur_far_transition = 1000.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ex0ce"]
+transparency = 1
+albedo_color = Color(0.537255, 0.784314, 1, 0.756863)
+
+[sub_resource type="PlaneMesh" id="PlaneMesh_06gry"]
+material = SubResource("StandardMaterial3D_ex0ce")
+size = Vector2(8192, 8192)
+subdivide_width = 128
+subdivide_depth = 128
 
 [node name="World" type="Node3D"]
 
@@ -59,3 +69,6 @@ camera_attributes = SubResource("CameraAttributesPractical_48oly")
 [node name="Terrain" parent="." instance=ExtResource("2_6c1ba")]
 custom_aabb = AABB(-2048, 0, -2048, 4096, 4000, 4096)
 plane = NodePath("../Plane")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="."]
+mesh = SubResource("PlaneMesh_06gry")

@@ -21,7 +21,8 @@ public partial class Camera : Camera3D
 	[Export]
 	float cameraUpOffset = 5.0f;
 
-	Vector3 previousAccelleration;
+	private Vector3 previousDirection = new Vector3(0,0,0);
+
 
 	private Vector3 previousAccellerationOffset = new Vector3(0,0,0);
 	// Called when the node enters the scene tree for the first time.
@@ -72,6 +73,8 @@ public partial class Camera : Camera3D
 
 	private Vector3 getCameraTargetDirection() {
 		Vector3 planeDir = -plane.GlobalTransform.Basis.Z;
-		return planeDir.Lerp(globalDirection, targetPriority);
+		Vector3 retVal = previousDirection.Lerp(planeDir.Lerp(globalDirection, targetPriority), 0.1f);
+		previousDirection = retVal;
+		return retVal;
 	}
 }

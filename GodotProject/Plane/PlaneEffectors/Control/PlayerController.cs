@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 public partial class PlayerController : Controller 
 {
-	float pitch, yaw, roll, power;
+	float pitch = 0.0f, yaw = 0.0f, roll = 0.0f, power = 0.0f;
 
 
 	[Export(PropertyHint.Range, "0,1,0.01")]
@@ -19,21 +19,24 @@ public partial class PlayerController : Controller
 	private bool joystick = false;
 
 	protected override void updateValues(double delta) {
-		delta = delta * 60;
-		if (Input.GetConnectedJoypads().Count > 0) {
-			pitch = Input.GetAxis("PitchDown", "PitchUp");
-			roll = Input.GetAxis("RollRight", "RollLeft");
-		} else {
-			pitch = smooth(Input.GetAxis("PitchDown", "PitchUp"), pitch, pitch_smoothing * (float)delta);
-			roll = smooth(Input.GetAxis("RollRight", "RollLeft"), roll, roll_smoothing * (float)delta);
+		GD.Print("Pitch: " + pitch + " Yaw: " + yaw + " Roll: " + roll + " Thrust: " + power);
+		pitch = smooth(pitch, Input.GetAxis("PitchDown", "PitchUp" ), 1 - (pitch_smoothing * (float)delta) * 50f);
+		roll  = smooth(roll,  Input.GetAxis("RollRight", "RollLeft"), 1 - (roll_smoothing  * (float)delta) * 50f);
+		yaw   = smooth(yaw,   Input.GetAxis("YawRight" , "YawLeft" ), 1 - (yaw_smoothing   * (float)delta) * 50f);
+		if (Input.GetAxis("DownThrust", "Thrust") != 0){
+			power = Mathf.Lerp(power, (Input.GetAxis("DownThrust"  ,"Thrust") + 1) / 2.0f, power_smoothing * (float)delta);
 		}
-		yaw = smooth(Input.GetAxis("YawRight", "YawLeft"), yaw, yaw_smoothing * (float)delta);
-		power = smooth(Input.GetActionStrength("Thrust"), power, power_smoothing * (float)delta);
+		
 
 	}
 
 	private float smooth(float currentValue, float newValue, float smoothing) {
-		return Mathf.Clamp(newValue * (1 - smoothing) + currentValue * smoothing,-1.0f,1.0f);
+		float val = Mathf.Clamp(newValue * (1 - smoothing) + currentValue * smoothing,-1.0f,1.0f);
+		if (Mathf.Abs(val) < 0.01f) {
+			return 0;
+		}else{
+			return val;
+		}
 	}
 
 	public override float getControlValue(Controller.ControlType type) {

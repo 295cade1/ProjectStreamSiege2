@@ -23,11 +23,12 @@ public partial class ControlSurface : DragSurface, ControlSubscriber
 		
 
 		float controlAngle = controller.getControlValue(inputType) * maxControl * flip;
+
 		float totalAngle = ((angleOfAttack + controlAngle) * (2 * Mathf.Pi) / 360);
-		float controlForce = Mathf.Sin(totalAngle) * 0.5f * AIRDENSITY * velocity.Length() * velocity.Length() * y_area * drag_coefficient;
+		float controlForce = Mathf.Sin(totalAngle) * 0.5f * AIRDENSITY * velocity.LengthSquared() * y_area * drag_coefficient;
 		Vector3 control = this.GlobalTransform.Basis.Y.Normalized() * controlForce;
 
-		//GD.Print(this.Name + "Controlling: " + controlForce + "Angles: (AOA, control, Total)" + angleOfAttack + " " + controlAngle + " " + totalAngle + "ControlActivation" + controlAmount);
+		//GD.Print(this.Name + "Controlling: " + controlForce + "Angles: (AOA, control, Total)" + angleOfAttack + " " + controlAngle + " " + totalAngle + "ControlActivation" + controller.getControlValue(inputType));
 		
 		return control + base.getSurfaceForce(velocity);
 	}
