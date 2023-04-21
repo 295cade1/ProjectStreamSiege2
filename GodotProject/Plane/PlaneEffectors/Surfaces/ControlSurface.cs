@@ -19,7 +19,7 @@ public partial class ControlSurface : DragSurface, ControlSubscriber
 
 
 	public override Vector3 getSurfaceForce(Vector3 velocity){
-		float angleOfAttack = orthographicProjection(this.GlobalTransform.Basis.X, velocity.Normalized()).SignedAngleTo(orthographicProjection(this.GlobalTransform.Basis.X, -this.GlobalTransform.Basis.Z.Normalized()), this.GlobalTransform.Basis.X.Normalized()) / (2 * Mathf.Pi) * 360;
+		float angleOfAttack = getAOA(velocity, -this.GlobalTransform.Basis.Z, this.GlobalTransform.Basis.X)  / (2 * Mathf.Pi) * 360;
 		
 
 		float controlAngle = controller.getControlValue(inputType) * maxControl * flip;
@@ -31,10 +31,6 @@ public partial class ControlSurface : DragSurface, ControlSubscriber
 		//GD.Print(this.Name + "Controlling: " + controlForce + "Angles: (AOA, control, Total)" + angleOfAttack + " " + controlAngle + " " + totalAngle + "ControlActivation" + controller.getControlValue(inputType));
 		
 		return control + base.getSurfaceForce(velocity);
-	}
-
-	private Vector3 orthographicProjection(Vector3 planeNormal, Vector3 point){
-		return point - point.Project(planeNormal);
 	}
 	//public float calculateActivation(){
 	//	return (Input.GetActionStrength(positiveAction) - Input.GetActionStrength(negativeAction));

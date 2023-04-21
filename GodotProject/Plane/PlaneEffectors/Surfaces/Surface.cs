@@ -6,11 +6,10 @@ public abstract partial class Surface : Node3D, PlaneEffector
 	private Vector3 previousPosition;
 	private MeshInstance3D debugLines;
 	//Applies the calculated surface forces
-	public void applyPlaneEffectorForce(PhysicsDirectBodyState3D state){
+	public (Vector3, Vector3) applyPlaneEffectorForce(PhysicsDirectBodyState3D state){
 		if (previousPosition == new Vector3(0,0,0)) {updatePrevousPosition(state);}
 		Vector3 addedVelocity = (getSurfaceForce(getVelocity(state))) * state.Step;
 		Vector3 forcePosition = this.GlobalPosition - state.Transform.Origin;
-		state.ApplyImpulse(addedVelocity, forcePosition);
 		if (debugLines != null){
 			debugLines.QueueFree();
 		}
@@ -18,6 +17,7 @@ public abstract partial class Surface : Node3D, PlaneEffector
 		debugLines = drawDebugForceLines(this.GlobalPosition, this.GlobalPosition + addedVelocity / 1000f);
 		
 		updatePrevousPosition(state);
+		return (addedVelocity, forcePosition);
 	}
 
 	//returns the force vector to be applied to this surface (to be overwritten)

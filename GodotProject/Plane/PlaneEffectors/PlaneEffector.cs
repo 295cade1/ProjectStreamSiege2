@@ -2,5 +2,5 @@ using Godot;
 using System;
 
 interface PlaneEffector {
-   void applyPlaneEffectorForce(PhysicsDirectBodyState3D state);
+   (Vector3, Vector3) applyPlaneEffectorForce(PhysicsDirectBodyState3D state);
 }

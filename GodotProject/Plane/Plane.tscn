@@ -14,21 +14,22 @@
 size = Vector3(10.8634, 1, 9.25728)
 
 [node name="Plane" type="RigidBody3D"]
-mass = 18143.7
+disable_mode = 2
+mass = 9071.85
 custom_integrator = true
 can_sleep = false
+freeze_mode = 1
 script = ExtResource("1_lmc2r")
 
 [node name="LiftEffectorLeft" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -3.95, 0, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 0, 2)
 script = ExtResource("2_qa0fu")
 liftCoefficient = 0.5
 ANGLEOFATTACKMAX = 90.0
 WINGAREA = 24.0
 liftCurve = ExtResource("3_e8pjb")
-x_area = 1.0
-y_area = 40.0
-z_area = 1.0
+y_area = 10.0
+z_area = 0.05
 drag_coefficient = 1.0
 
 [node name="LiftEffectorRight" type="Node3D" parent="."]
@@ -38,17 +39,16 @@ liftCoefficient = 0.5
 ANGLEOFATTACKMAX = 90.0
 WINGAREA = 24.0
 liftCurve = ExtResource("3_e8pjb")
-x_area = 1.0
-y_area = 40.0
-z_area = 1.0
+y_area = 10.0
+z_area = 0.05
 drag_coefficient = 1.0
 
 [node name="DragEffector" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2.08165e-12, 2.08165e-12, 3)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1)
 script = ExtResource("3_ih2y8")
-x_area = 10.0
-y_area = 20.0
-z_area = 4.0
+x_area = 4.0
+y_area = 10.0
+z_area = 0.25
 drag_coefficient = 1.0
 
 [node name="CollisionShape3D" type="CollisionShape3D" parent="."]
@@ -60,7 +60,8 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2, 2.08165e-12, 10)
 script = ExtResource("4_wgdki")
 controlCoefficient = 1.0
 maxControl = 60.0
-y_area = 24.0
+y_area = 8.0
+z_area = 0.01
 drag_coefficient = 1.0
 
 [node name="ControlEffectorPitchTailRight" type="Node3D" parent="."]
@@ -68,51 +69,17 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 2, 2.08165e-12, 10)
 script = ExtResource("4_wgdki")
 controlCoefficient = 1.0
 maxControl = 60.0
-y_area = 24.0
-drag_coefficient = 1.0
-
-[node name="ControlEffectorYawTailLeft" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -0.750022, 1, 9.38072)
-script = ExtResource("4_wgdki")
-maxControl = 15.0
-inputType = 2
-y_area = 30.0
-drag_coefficient = 1.0
-
-[node name="ControlEffectorYawTailRight" type="Node3D" parent="."]
-transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0.75, 1, 9.381)
-script = ExtResource("4_wgdki")
-maxControl = 15.0
-inputType = 2
-y_area = 30.0
-drag_coefficient = 1.0
-
-[node name="ControlEffectorRollLeft" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.08165e-12, 4.50576)
-script = ExtResource("4_wgdki")
-maxControl = 30.0
-flip = -1
-inputType = 1
-y_area = 4.0
-drag_coefficient = 1.0
-
-[node name="ControlEffectorRollRight" type="Node3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4.50576)
-script = ExtResource("4_wgdki")
-maxControl = 30.0
-inputType = 1
-y_area = 4.0
+y_area = 8.0
+z_area = 0.01
 drag_coefficient = 1.0
 
 [node name="ThrusterLeft" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.4, 0, 9.935)
 script = ExtResource("5_kube8")
-thrusterForce = 1.80152e+06
 
 [node name="ThrusterRight" type="Node3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.4, 2.08165e-12, 9.935)
 script = ExtResource("5_kube8")
-thrusterForce = 1.80152e+06
 
 [node name="CenterOfGravity" type="Node3D" parent="."]
 script = ExtResource("10_s0moc")
@@ -126,3 +93,48 @@ pitch_smoothing = 0.1
 yaw_smoothing = 0.5
 roll_smoothing = 0.5
 power_smoothing = 0.86
+
+[node name="ControlEffectorYawTailLeft" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, -0.750022, 1, 9.38072)
+script = ExtResource("4_wgdki")
+controlCoefficient = 1.0
+maxControl = 15.0
+inputType = 2
+x_area = 0.1
+y_area = 10.0
+z_area = 0.001
+drag_coefficient = 1.0
+
+[node name="ControlEffectorYawTailRight" type="Node3D" parent="."]
+transform = Transform3D(-4.37114e-08, -1, 3.48787e-16, 1, -4.37114e-08, -3.48787e-16, 3.48787e-16, 3.48787e-16, 1, 0.75, 1, 9.381)
+script = ExtResource("4_wgdki")
+controlCoefficient = 1.0
+maxControl = 15.0
+inputType = 2
+x_area = 0.1
+y_area = 10.0
+z_area = 0.001
+drag_coefficient = 1.0
+
+[node name="ControlEffectorRollLeft" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -4, 2.08165e-12, 4.50576)
+script = ExtResource("4_wgdki")
+controlCoefficient = 1.0
+maxControl = 30.0
+flip = -1
+inputType = 1
+x_area = 0.1
+y_area = 2.0
+z_area = 0.001
+drag_coefficient = 1.0
+
+[node name="ControlEffectorRollRight" type="Node3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 4, 0, 4.50576)
+script = ExtResource("4_wgdki")
+controlCoefficient = 1.0
+maxControl = 30.0
+inputType = 1
+x_area = 0.1
+y_area = 2.0
+z_area = 0.001
+drag_coefficient = 1.0

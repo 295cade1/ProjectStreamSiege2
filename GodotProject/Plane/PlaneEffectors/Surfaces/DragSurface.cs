@@ -20,10 +20,22 @@ public partial class DragSurface : Surface
 		Vector3 dragDirection = (-this.GlobalTransform.Basis.X.Normalized() * velocity.Normalized().Dot(this.GlobalTransform.Basis.X.Normalized()) * x_area) +
 									(-this.GlobalTransform.Basis.Y.Normalized() * velocity.Normalized().Dot(this.GlobalTransform.Basis.Y.Normalized()) * y_area) +
 									(-this.GlobalTransform.Basis.Z.Normalized() * velocity.Normalized().Dot(this.GlobalTransform.Basis.Z.Normalized()) * z_area);
+		
 		Vector3 dragImpulse = dragDirection * dragAmount;
 	
 		//GD.Print("Dragging" + "DragImpulse" + dragImpulse + "DragAmount" + dragAmount + "dragArea" + dragArea);
 		
 		return dragImpulse + base.getSurfaceForce(velocity);
+	}
+
+	public float getAOA(Vector3 velocity, Vector3 targetDir, Vector3 axis){
+		Vector3 velocityDirProj = orthographicProjection(axis, velocity.Normalized()).Normalized();
+		Vector3 targetDirProj = orthographicProjection(axis, targetDir.Normalized()).Normalized();
+		
+		return velocityDirProj.SignedAngleTo(targetDirProj, axis);
+	}
+
+		private Vector3 orthographicProjection(Vector3 planeNormal, Vector3 point){
+		return point - point.Project(planeNormal);
 	}
 }

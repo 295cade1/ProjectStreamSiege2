@@ -19,10 +19,13 @@ public partial class PlayerController : Controller
 	private bool joystick = false;
 
 	protected override void updateValues(double delta) {
-		GD.Print("Pitch: " + pitch + " Yaw: " + yaw + " Roll: " + roll + " Thrust: " + power);
+		//GD.Print("Pitch: " + pitch + " Yaw: " + yaw + " Roll: " + roll + " Thrust: " + power);
 		pitch = smooth(pitch, Input.GetAxis("PitchDown", "PitchUp" ), 1 - (pitch_smoothing * (float)delta) * 50f);
 		roll  = smooth(roll,  Input.GetAxis("RollRight", "RollLeft"), 1 - (roll_smoothing  * (float)delta) * 50f);
 		yaw   = smooth(yaw,   Input.GetAxis("YawRight" , "YawLeft" ), 1 - (yaw_smoothing   * (float)delta) * 50f);
+		//pitch = Input.GetAxis("PitchDown", "PitchUp" );
+		//roll = Input.GetAxis("RollRight", "RollLeft");
+		//yaw = Input.GetAxis("YawRight" , "YawLeft" );
 		if (Input.GetAxis("DownThrust", "Thrust") != 0){
 			power = Mathf.Lerp(power, (Input.GetAxis("DownThrust"  ,"Thrust") + 1) / 2.0f, power_smoothing * (float)delta);
 		}

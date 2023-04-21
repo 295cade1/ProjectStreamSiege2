@@ -22,8 +22,6 @@ Draw3d="*res://Debug/Draw3d.gd"
 
 [display]
 
-window/size/viewport_width=1920
-window/size/viewport_height=1080
 window/stretch/mode="viewport"
 window/stretch/aspect="ignore"
 

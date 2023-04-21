@@ -23,12 +23,16 @@ public partial class Plane : RigidBody3D
 
 	public override void _IntegrateForces(PhysicsDirectBodyState3D state) {
 		if(isLocked) {state.LinearVelocity = new Vector3(speed.X * 0.999f ,state.LinearVelocity.Y ,speed.Z * 0.999f); }
+		List<(Vector3, Vector3)> forces = new List<(Vector3, Vector3)>();
 		foreach (PlaneEffector effector in planeEffectors) {
-			effector.applyPlaneEffectorForce(state);
+			forces.Add(effector.applyPlaneEffectorForce(state));
+		}
+		foreach ((Vector3 force, Vector3 position) in forces) {
+			state.ApplyImpulse(force, position);
 		}
 		accelleration = state.LinearVelocity - speed;
 		speed = state.LinearVelocity;
-		//GD.Print(state.LinearVelocity.Length());
+		GD.Print("AIRSPEED:" + state.LinearVelocity.Length() + "ALT: " + state.Transform.Origin.Y);
 		if (isLocked) {state.LinearVelocity = new Vector3(0, state.LinearVelocity.Y, 0); }
 
 	}
